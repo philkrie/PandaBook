@@ -9,6 +9,10 @@
      * Desc.:  Returns HTML table of Firstname, Lastname pairs for all entries
      *         in the address book database table. For this stub, the database
      *         is not accessed; returned data is hard-coded.
+     *
+     * How to access returned data: The returned table has id='entryListTable'
+     *     and each row (except header row) has the custom attribute
+     *     data-personid (type: int) indicating the id of the entry.
      ==========================================================================
 -->
 
@@ -50,7 +54,7 @@ mysql_connect('ix-trusty:3022','xunl','tbc123bl') or die("Could not connect: " .
 */
 
 // Table header row.
-echo "<table>
+echo "<table id='entryListTable'>
 <tr>
 <!-- <th>Person ID</th> -->
 <th>Firstname</th>
