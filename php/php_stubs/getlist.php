@@ -41,18 +41,6 @@ th {text-align: left;}
 
 <?php
 
-// Used to be: mysqli_connect, mysqli_connect_errno, mysqli_connect_error
-//$con = 
-mysql_connect('ix-trusty:3022','xunl','tbc123bl') or die("Could not connect: " . mysql_error() ); //,'panda_address_book')
-/*if (!$con) {
-    echo "Error: Unable to connect to MySQL." . PHP_EOL;
-    echo "Debugging errno: " . mysql_errno() . PHP_EOL;
-    echo "Debugging error: " . mysql_error() . PHP_EOL;
-    exit;
-    die('Could not connect: ' . mysqli_error($con));
-}
-*/
-
 // Table header row.
 echo "<table id='entryListTable'>
 <tr>
