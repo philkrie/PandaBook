@@ -72,7 +72,7 @@ $entryList = array(
 // For this stub, verify (1 <= id <= 5), or else fields get filled with 'Null'.
 if ($id < 1 or $id > 5)
     $id = 0;
-$row = $entryList[$id];  //FIXME! id is indexed from 1, entryList is indexed from 0!
+$row = $entryList[$id];
 
 // Table data row.
 // Thanks to HTML 5, can define data-personid and access from Javascript. 
