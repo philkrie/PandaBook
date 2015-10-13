@@ -1,15 +1,8 @@
 $(document).ready(function () {
 	"use strict";
-	
-	$("#submit-btn").hide();
-	$("input[name=firstname]").val("Phillip");
-	$("input[name=lastname]").val("Kriegel");
-	$("input[name=city]").val("Beaverton");
-	$("input[name=state]").val("OR");
-	$("input[name=zip]").val("97007");
-	$("input[name=phone]").val("5038404219");
-	$("input[name=email]").val("philkrie@gmail.com");
     
+    $("#submit-btn").hide();
+    $("#cancel-btn").hide();
     listEntries();
 
 });
@@ -50,9 +43,9 @@ function addEntry(){
     "use strict";
     $("#entries").fadeOut(300);
     $("#edit-btn").fadeOut(300);
-    $("#delete-btn").fadeOut(300);
     $("#add-btn").fadeOut(300);
     $("#submit-btn").show();
+    $("#cancel-btn").show();
     
     $("input[name=firstname]").prop('disabled', false);
 	$("input[name=lastname]").prop('disabled', false);

@@ -49,6 +49,7 @@
 							</form>
                             <button id="edit-btn" type="button" class="btn btn-default">Edit</button>
                             <button id="submit-btn" type="button" class="btn btn-default" onclick="submitEntry()">Submit</button>
+                            <button id="cancel-btn" type="button" class="btn btn-default" onclick="cancelEntry()">Cancel</button>
                             <button id="add-btn" type="button" class="btn btn-default" onclick="addEntry()">Add</button>
 						</div>
 					</div>
@@ -56,38 +57,11 @@
 					<div id="entries">
 						<div class=col-sm-6>
 							<select id="entrylist" size="19" onchange="viewEntry(this.value)">
-                                <option value="1">Item #1</option>
-                                <option value="2">Item #2</option>
-                                <option value="3">Item #3</option>
-                                <option value="4">Item #4</option>
-                                <option value="5">Item #5</option>
-                                <option value="6">Item #6</option>
-                                <option value="7">Item #7</option>
-                                <option value="1">Item #1</option>
-                                <option value="2">Item #2</option>
-                                <option value="3">Item #3</option>
-                                <option value="4">Item #4</option>
-                                <option value="5">Item #5</option>
-                                <option value="6">Item #6</option>
-                                <option value="7">Item #7</option>
-                                <option value="1">Item #1</option>
-                                <option value="2">Item #2</option>
-                                <option value="3">Item #3</option>
-                                <option value="4">Item #4</option>
-                                <option value="5">Item #5</option>
-                                <option value="6">Item #6</option>
-                                <option value="7">Item #7</option>
-                                <option value="1">Item #1</option>
-                                <option value="2">Item #2</option>
-                                <option value="3">Item #3</option>
-                                <option value="4">Item #4</option>
-                                <option value="5">Item #5</option>
-                                <option value="6">Item #6</option>
-                                <option value="7">Item #7</option>
+                                
                             </select>
 						</div>
+                        <button id="delete-btn" type="button" class="btn btn-default" onclick="deleteEntry()">Delete</button>
 					</div>
-                    <button id="delete-btn" type="button" class="btn btn-default" onclick="deleteEntry()">Delete</button>
 				</div>
 			</div>
 		</div>
