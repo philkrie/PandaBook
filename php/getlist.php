@@ -1,26 +1,23 @@
-<!DOCTYPE html>
-
-<!-- ==========================================================================
-     * getlist.php (stub)
-     *
-     * Author:   M.Ishii
-     * Date:     2015-10-10
-     * Modified: 2015-10-11
-     *
-     * Desc.:  Returns JSON array of IdName objects for each entry in the
-     *         address book, like [{"id":?, "fn":?, "ln":?}, {...}, ...].
-
-     TODO: Insert mysql queries.
-     ==========================================================================
--->
-
-<!-- Code contributed in part from tutorial at
-     w3schools.com/php/php_ajax_database.asp and from guidance at
-     www.w3.org/TR/2011/WD-html5-20110525/elements.html
--->
-
-
 <?php
+
+// ==========================================================================
+// * getlist.php (stub)
+// *
+// * Author:   M.Ishii
+// * Date:     2015-10-10
+// * Modified: 2015-10-12
+// *
+// * Desc.:  Returns JSON array of IdName objects for each entry in the
+// *         address book, like [{"id":?, "fn":?, "ln":?}, {...}, ...].
+
+// TODO: Insert mysql queries.
+// ==========================================================================
+
+// Code contributed in part from tutorial at
+// w3schools.com/php/php_ajax_database.asp and from guidance at
+// www.w3.org/TR/2011/WD-html5-20110525/elements.html
+//
+
 
 // ============================================================================
 // Constants/parameters expected to change.
@@ -44,7 +41,8 @@ mysql_connect('ix-trusty:3022','xunl','tbc123bl') or die("Could not connect: " .
 mysql_select_db($dbName) or die("Could not find database: " . mysql_error() );
 
 // Construct & execute MySQL query to select rows from the database.
-$sql = "SELECT * FROM $tableName";    // Select all.
+//TODO: Don't assume the field is named last_name, use constant/keyMap below.
+$sql = "SELECT * FROM $tableName ORDER BY last_name";    // Select all.
 $queryResult = mysql_query($sql);
 
 
@@ -66,7 +64,7 @@ $fakeTable = array(
 // ============================================================================
 
 // Declare connector to naming scheme of database: keyMap[phpName] == mysqlName
-$keyMap = array('id'=>'person_ID', 'fn'=>'first_name', 'ln'=>'last_name');
+$keyMap = array('id'=>'person_ID', 'firstname'=>'first_name', 'lastname'=>'last_name');
 
 // Input: Row of db table.
 // Precondition: The input row has columns named like values of keyMap.
