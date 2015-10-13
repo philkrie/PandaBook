@@ -47,13 +47,7 @@ function addEntry(){
     $("#submit-btn").show();
     $("#cancel-btn").show();
     
-    $("input[name=firstname]").prop('disabled', false);
-	$("input[name=lastname]").prop('disabled', false);
-	$("input[name=city]").prop('disabled', false);
-	$("input[name=state]").prop('disabled', false);
-	$("input[name=zip]").prop('disabled', false);
-	$("input[name=phone]").prop('disabled', false);
-	$("input[name=email]").prop('disabled', false);
+    toggleTextBoxes(false);
     $("input[name=firstname]").val("");
 	$("input[name=lastname]").val("");
 	$("input[name=city]").val("");
@@ -85,6 +79,7 @@ function submitEntry(){
                 window.alert("Entry was not added, an error occured");
             } else {
                 window.alert("You have successfully added the entry ");
+                $("#entrylist option").remove();
                 listEntries();
             };
         },
@@ -99,6 +94,8 @@ function submitEntry(){
     $("#delete-btn").fadeIn(300);
     $("#add-btn").fadeIn(300);
     $("#submit-btn").hide();
+    $("#cancel-btn").hide();
+    toggleTextBoxes(true);
 }
 
 function listEntries(){
@@ -132,14 +129,15 @@ function deleteEntry(){
         $.ajax({
         url: 'php/deleteentry.php',
         type: 'post',
+        dataType: 'json',
         data: {'id': $value},
-        success: function(data) {
-            if(data == -1){
+        success: function(json) {
+            if(!json.boolean){
                 window.alert("Entry was not deleted, an error occured");
             } else {
                 window.alert("You have successfully deleted this entry");
-                
-                $('#entrylist option[value=' + $value + ']').remove();
+                $("#entrylist option").remove();
+                listEntries();
             };
         },
         error: function(xhr, desc, err) {
@@ -152,3 +150,15 @@ function deleteEntry(){
 
 //TODO CANCEL BUTTON
 //TODO EDIT BUTTON
+
+function toggleTextBoxes(boolean){
+    $("input[name=firstname]").prop('disabled', boolean);
+	$("input[name=lastname]").prop('disabled', boolean);
+    $("input[name=addr1]").prop('disabled', boolean);
+	$("input[name=addr2]").prop('disabled', boolean);
+	$("input[name=city]").prop('disabled', boolean);
+	$("input[name=state]").prop('disabled', boolean);
+	$("input[name=zip]").prop('disabled', boolean);
+	$("input[name=phone]").prop('disabled', boolean);
+	$("input[name=email]").prop('disabled', boolean);
+}
