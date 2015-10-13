@@ -16,7 +16,7 @@ function viewEntry(value) {
         data: {'id': value},
         dataType: 'json',
         success: function (json) {
-            window.alert("viewEntry activated");
+            //window.alert("viewEntry activated");
             $.each(json, function(i, item) {
 	           if(typeof item == 'object') {
                 $("input[name=firstname]").val(item.firstname);
@@ -84,14 +84,9 @@ function submitEntry(){
             if(data == -1){
                 window.alert("Entry was not added, an error occured");
             } else {
-                window.alert("You have successfully added this entry");
-                $('#entrylist').append($('<option/>', { 
-                    value: data,
-                    text :  $("input[name=lastname]").val() + ", " + $("input[name=firstname]").val()
-                }))
-            
+                window.alert("You have successfully added the entry ");
+                listEntries();
             };
-            
         },
         error: function(xhr, desc, err) {
             console.log(xhr);
@@ -112,7 +107,7 @@ function listEntries(){
         type: 'get',
         dataType: 'json',
         success: function (json) {
-            window.alert("listEntries activated");
+            //window.alert("listEntries activated");
             $.each(json, function(i, item) {
 	           if(typeof item == 'object') {
                     $('#entrylist').append($('<option/>', { 
