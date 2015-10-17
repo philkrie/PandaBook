@@ -22,6 +22,19 @@
 		<div id="interface">
 			<div class="container">
 				<div class = "row">
+                    <!--ENTRY LIST: Entries shown in this list-->
+					<div id="entries">
+						<div class=col-sm-6>
+							<select id="entrylist" size="24" onchange="viewEntry(this.value)">
+                                
+                            </select>
+                            <button id="add-btn" type="button" class="btn btn-default" onclick="addEntry()">Add</button>
+                            <button id="delete-btn" type="button" class="btn btn-default" onclick="deleteEntry()">Delete</button>
+                            <label>Sort By</label>
+                            <button id="name-sort-btn" type="button" class="btn btn-default">Last Name</button>
+                            <button id="zip-sort-btn" type="button" class="btn btn-default">Zip Code</button>
+						</div>
+					</div>
 					<!--INFORMATION CARD: Shows address information, allows edits to be made here-->
 					<div id="info">
 						<div class=col-sm-6>
@@ -55,18 +68,9 @@
 							</form>
                             <button id="edit-btn" type="button" class="btn btn-default">Edit</button>
                             <button id="submit-btn" type="button" class="btn btn-default" onclick="submitEntry()">Submit</button>
+                            <button id="change-btn" type="button" class="btn btn-default" onclick="changeEntry()">Change</button>
                             <button id="cancel-btn" type="button" class="btn btn-default" onclick="cancelEntry()">Cancel</button>
-                            <button id="add-btn" type="button" class="btn btn-default" onclick="addEntry()">Add</button>
 						</div>
-					</div>
-					<!--ENTRY LIST: Entries shown in this list-->
-					<div id="entries">
-						<div class=col-sm-6>
-							<select id="entrylist" size="19" onchange="viewEntry(this.value)">
-                                
-                            </select>
-						</div>
-                        <button id="delete-btn" type="button" class="btn btn-default" onclick="deleteEntry()">Delete</button>
 					</div>
 				</div>
 			</div>

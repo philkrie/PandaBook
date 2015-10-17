@@ -3,6 +3,7 @@ $(document).ready(function () {
     
     $("#submit-btn").hide();
     $("#cancel-btn").hide();
+    $("#change-btn").hide();
     listEntries();
 
 });
@@ -41,33 +42,40 @@ function viewEntry(value) {
 //Function that sets up the page for adding an entry
 function addEntry(){
     "use strict";
-    $("#entries").fadeOut(300);
+    $("#entries").animate({ opacity: 0 });
     $("#edit-btn").fadeOut(300);
-    $("#add-btn").fadeOut(300);
     $("#submit-btn").show();
     $("#cancel-btn").show();
-    
     toggleTextBoxes(false);
-    $("input[name=firstname]").val("");
-	$("input[name=lastname]").val("");
-	$("input[name=city]").val("");
-	$("input[name=state]").val("");
-	$("input[name=zip]").val("");
-	$("input[name=phone]").val("");
-	$("input[name=email]").val("");
-    
 }
 
 //Function allows one to press submit and push information to the server.
 function submitEntry(){
     
     //TODO: NEEDS INPUT VALIDATION AND VIEW
+    var phoneRegex = /^(\d{7}|\d{10})$/;
+
+    //Input validation
+    if(($("input[name=firstname]").val() == "" && $("input[name=lastname]").val() == "") ||
+       ($("input[name=addr1]").val() == "" &&
+        $("input[name=addr2]").val() == "" &&
+        $("input[name=city]").val() == ""  &&
+        $("input[name=state]").val() == "" &&
+        $("input[name=zip]").val() == ""   &&
+        $("input[name=phone]").val() == "" &&
+        $("input[name=email]").val() == "")) {
+        alert("To submit an entry, please enter at least either a first name or a last name and one other piece of information")
+    } else if ($("input[name=phone]").val() != "" && (!phoneRegex.test($("input[name=phone]").val()))) {
+        alert("Invalid phone number, please correct. Needs 7 or 10 digits");  
+    } else {
     $.ajax({
         url: 'php/addentry.php',
         type: 'post',
         data: {
             'fn': $("input[name=firstname]").val(), 
-            'ln': $("input[name=lastname]").val(),  
+            'ln': $("input[name=lastname]").val(),
+            'addr1': $("input[name=addr1]").val(),
+            'addr2': $("input[name=addr2]").val(),
             'city': $("input[name=city]").val(),  
             'st': $("input[name=state]").val(), 
             'zip': $("input[name=zip]").val(), 
@@ -89,13 +97,15 @@ function submitEntry(){
         }
     });
     
-    $("#entries").fadeIn(300);
+    $("#entries").animate({ opacity: 100 });
     $("#edit-btn").fadeIn(300);
     $("#delete-btn").fadeIn(300);
     $("#add-btn").fadeIn(300);
     $("#submit-btn").hide();
     $("#cancel-btn").hide();
     toggleTextBoxes(true);
+    clearTextBoxes();
+    }
 }
 
 function listEntries(){
@@ -148,6 +158,24 @@ function deleteEntry(){
     }
 }
 
+function editEntry(){
+    "use strict";
+    $("#entries").animate({ opacity: 0 });
+    $("#edit-btn").fadeOut(300);
+    $("#cancel-btn").show();
+    toggleTextBoxes(false);    
+}
+
+function cancelEntry(){
+    clearTextBoxes();
+    $("#entries").animate({ opacity: 100 });
+    $("#edit-btn").fadeIn(300);
+    $("#delete-btn").fadeIn(300);
+    $("#add-btn").fadeIn(300);
+    $("#submit-btn").hide();
+    $("#cancel-btn").hide();
+    toggleTextBoxes(true);
+}
 //TODO CANCEL BUTTON
 //TODO EDIT BUTTON
 
@@ -161,4 +189,14 @@ function toggleTextBoxes(boolean){
 	$("input[name=zip]").prop('disabled', boolean);
 	$("input[name=phone]").prop('disabled', boolean);
 	$("input[name=email]").prop('disabled', boolean);
+}
+
+function clearTextBoxes(){
+    $("input[name=firstname]").val("");
+	$("input[name=lastname]").val("");
+	$("input[name=city]").val("");
+	$("input[name=state]").val("");
+	$("input[name=zip]").val("");
+	$("input[name=phone]").val("");
+	$("input[name=email]").val("");
 }
