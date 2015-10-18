@@ -22,6 +22,8 @@ function viewEntry(value) {
 	           if(typeof item == 'object') {
                 $("input[name=firstname]").val(item.firstname);
                 $("input[name=lastname]").val(item.lastname);
+                $("input[name=addr1]").val(item.addr1);
+                $("input[name=addr2]").val(item.addr2);
                 $("input[name=city]").val(item.city);
                 $("input[name=state]").val(item.state);
                 $("input[name=zip]").val(item.zip);
