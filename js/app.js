@@ -122,7 +122,7 @@ function submitEntry(){
 function listEntries(value){
     $("#entrylist option").remove();
     $.ajax({
-        url: 'php/getlist.php',
+        url: 'php/listentries.php',
         type: 'get',
         data: {'sort': value},
         dataType: 'json',
@@ -132,7 +132,7 @@ function listEntries(value){
 	           if(typeof item == 'object') {
                     $('#entrylist').append($('<option/>', { 
                         value: item.id,
-                        text :  item.lastname + ", " + item.firstname
+                        text :  item.lastname + ", " + item.firstname + "         " + item.zip;
                     }))
                }
             })
