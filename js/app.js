@@ -4,7 +4,7 @@ $(document).ready(function () {
     $("#submit-btn").hide();
     $("#cancel-btn").hide();
     $("#change-btn").hide();
-    listEntries();
+    listEntries("name");
 
 });
 
@@ -54,6 +54,9 @@ function submitEntry(){
     
     //TODO: NEEDS INPUT VALIDATION AND VIEW
     var phoneRegex = /^(\d{7}|\d{10})$/;
+    var stateRegex = /\b([A-Z]{2})\b/;
+    var zipRegex = /^\d{5}(?:[-\s]\d{4})?$/;
+    var emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
 
     //Input validation
     if(($("input[name=firstname]").val() == "" && $("input[name=lastname]").val() == "") ||
@@ -64,9 +67,15 @@ function submitEntry(){
         $("input[name=zip]").val() == ""   &&
         $("input[name=phone]").val() == "" &&
         $("input[name=email]").val() == "")) {
-        alert("To submit an entry, please enter at least either a first name or a last name and one other piece of information")
+        window.alert("To submit an entry, please enter at least either a first name or a last name and one other piece of information")
     } else if ($("input[name=phone]").val() != "" && (!phoneRegex.test($("input[name=phone]").val()))) {
-        alert("Invalid phone number, please correct. Needs 7 or 10 digits");  
+        window.alert("Invalid phone number, please correct. Needs 7 or 10 digits");
+    } else if ($("input[name=state]").val() != "" && (!stateRegex.test($("input[name=state]").val()))) {
+        window.alert("Invalid state code, please correct. Needs to be two uppercase letters");  
+    } else if ($("input[name=zip]").val() != "" && (!zipRegex.test($("input[name=zip]").val()))) {
+        window.alert("Invalid zip number, please correct. Needs 5 or 9 digits");  
+    } else if ($("input[name=email]").val() != "" && (!emailRegex.test($("input[name=email]").val()))) {
+        window.alert("Invalid email number, please correct. Needs an @ symbol and a .suffix (TLD)");  
     } else {
     $.ajax({
         url: 'php/addentry.php',
@@ -87,8 +96,7 @@ function submitEntry(){
                 window.alert("Entry was not added, an error occured");
             } else {
                 window.alert("You have successfully added the entry ");
-                $("#entrylist option").remove();
-                listEntries();
+                listEntries("name");
             };
         },
         error: function(xhr, desc, err) {
@@ -108,10 +116,12 @@ function submitEntry(){
     }
 }
 
-function listEntries(){
+function listEntries(value){
+    $("#entrylist option").remove();
     $.ajax({
         url: 'php/getlist.php',
         type: 'get',
+        data: {'sort': value},
         dataType: 'json',
         success: function (json) {
             //window.alert("listEntries activated");
@@ -146,8 +156,7 @@ function deleteEntry(){
                 window.alert("Entry was not deleted, an error occured");
             } else {
                 window.alert("You have successfully deleted this entry");
-                $("#entrylist option").remove();
-                listEntries();
+                listEntries("name");
             };
         },
         error: function(xhr, desc, err) {
@@ -159,12 +168,60 @@ function deleteEntry(){
 }
 
 function editEntry(){
-    "use strict";
-    $("#entries").animate({ opacity: 0 });
-    $("#edit-btn").fadeOut(300);
-    $("#cancel-btn").show();
-    toggleTextBoxes(false);    
+    //if($('#entrylist')[0].selectedIndex == -1){
+    //    window.alert("You must have an entry selected in order to edit")
+    //} else {
+        $("#entries").animate({ opacity: 0 });
+        $("#edit-btn").fadeOut(300);
+        $("#cancel-btn").show();
+        $("#change-btn").show();
+        toggleTextBoxes(false);
+    } 
+//}
+
+function changeEntry(){
+    //TODO: NEEDS INPUT VALIDATION AND VIEW
+    $value = $('#entrylist option:selected').val();
+    $.ajax({
+        url: 'php/editentry.php',
+        type: 'post',
+        data: {
+            'id': $value,
+            'fn': $("input[name=firstname]").val(), 
+            'ln': $("input[name=lastname]").val(),
+            'addr1': $("input[name=addr1]").val(),
+            'addr2': $("input[name=addr2]").val(),
+            'city': $("input[name=city]").val(),  
+            'st': $("input[name=state]").val(), 
+            'zip': $("input[name=zip]").val(), 
+            'ph': $("input[name=phone]").val(), 
+            'email': $("input[name=email]").val(), 
+        },
+        success: function(data) {
+            if(data == -1){
+                window.alert("Entry was not edited, an error occured");
+            } else {
+                window.alert("You have successfully edited the entry ");
+                listEntries("name");
+            };
+        },
+        error: function(xhr, desc, err) {
+            console.log(xhr);
+            console.log("Details: " + desc + "\nError: " + err);
+        }
+    });
+    
+    $("#entries").animate({ opacity: 100 });
+    $("#edit-btn").fadeIn(300);
+    $("#delete-btn").fadeIn(300);
+    $("#add-btn").fadeIn(300);
+    $("#submit-btn").hide();
+    $("#cancel-btn").hide();
+    $("#change-btn").hide();
+    toggleTextBoxes(true);
+    clearTextBoxes();
 }
+
 
 function cancelEntry(){
     clearTextBoxes();
@@ -174,6 +231,7 @@ function cancelEntry(){
     $("#add-btn").fadeIn(300);
     $("#submit-btn").hide();
     $("#cancel-btn").hide();
+    $("#change-btn").hide();
     toggleTextBoxes(true);
 }
 //TODO CANCEL BUTTON
@@ -194,6 +252,8 @@ function toggleTextBoxes(boolean){
 function clearTextBoxes(){
     $("input[name=firstname]").val("");
 	$("input[name=lastname]").val("");
+    $("input[name=addr1]").val("");
+	$("input[name=addr2]").val("");
 	$("input[name=city]").val("");
 	$("input[name=state]").val("");
 	$("input[name=zip]").val("");
