@@ -47,6 +47,7 @@ function addEntry(){
     $("#submit-btn").show();
     $("#cancel-btn").show();
     toggleTextBoxes(false);
+    clearTextBoxes();
 }
 
 //Function allows one to press submit and push information to the server.
@@ -164,6 +165,7 @@ function deleteEntry(){
             console.log("Details: " + desc + "\nError: " + err);
         }
     });
+    clearTextBoxes();
     }
 }
 
