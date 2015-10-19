@@ -1,10 +1,14 @@
+var bookName = null;
+
 $(document).ready(function () {
 	"use strict";
     
+    bookName = decodeURI(parent.document.URL.substring(parent.document.URL.indexOf('=') + 1, parent.document.URL.length));
     $("#submit-btn").hide();
     $("#cancel-btn").hide();
     $("#change-btn").hide();
     listEntries("name");
+    window.alert("WE RECIEVED " + bookName);
 
 });
 
@@ -14,21 +18,28 @@ function viewEntry(value) {
     $.ajax({
         url: 'php/viewentry.php',
         type: 'get',
-        data: {'id': value},
+        data: {
+            'bookName': bookName,
+            'id': value},
         dataType: 'json',
         success: function (json) {
             //window.alert("viewEntry activated");
             $.each(json, function(i, item) {
 	           if(typeof item == 'object') {
-                $("input[name=firstname]").val(item.firstname);
-                $("input[name=lastname]").val(item.lastname);
-                $("input[name=addr1]").val(item.addr1);
-                $("input[name=addr2]").val(item.addr2);
-                $("input[name=city]").val(item.city);
-                $("input[name=state]").val(item.state);
-                $("input[name=zip]").val(item.zip);
-                $("input[name=phone]").val(item.phone);
-                $("input[name=email]").val(item.email);
+                   if(item.success){
+                        $("input[name=firstname]").val(item.entryData.firstname);
+                        $("input[name=lastname]").val(item.entryData.lastname);
+                        $("input[name=addr1]").val(item.entryData.addr1);
+                        $("input[name=addr2]").val(item.entryData.addr2);
+                        $("input[name=city]").val(item.entryData.city);
+                        $("input[name=state]").val(item.entryData.state);
+                        $("input[name=zip]").val(item.entryData.zip);
+                        $("input[name=phone]").val(item.entryData.phone);
+                        $("input[name=email]").val(item.entryData.email);
+                   } else {
+                       window.alert("Failed to display entries");
+                   }
+                
                }
             })
         },
@@ -84,6 +95,7 @@ function submitEntry(){
         url: 'php/addentry.php',
         type: 'post',
         data: {
+            'bookName' : bookName,
             'fn': $("input[name=firstname]").val(), 
             'ln': $("input[name=lastname]").val(),
             'addr1': $("input[name=addr1]").val(),
@@ -124,16 +136,25 @@ function listEntries(value){
     $.ajax({
         url: 'php/listentries.php',
         type: 'get',
-        data: {'sort': value},
+        data: {
+            'bookName' : bookName,
+            'sort': value},
         dataType: 'json',
         success: function (json) {
             //window.alert("listEntries activated");
             $.each(json, function(i, item) {
-	           if(typeof item == 'object') {
-                    $('#entrylist').append($('<option/>', { 
-                        value: item.id,
-                        text :  item.lastname + ", " + item.firstname + "         " + item.zip;
-                    }))
+                if(typeof item == 'object') {
+                    if(item.success){
+                        for( var i = 0; i < item.entryList.length; i++){
+                            $('#entrylist').append($('<option/>', { 
+                                value: item.entryList[i].id,
+                                text :  item.entryList[i].lastname + ", " + item.entryList[i].firstname + "         " + item.entryList[i].zip
+                            }))
+                        }
+                    } else {
+                        window.alert("Failure to list entries");
+                    }
+                    
                }
             })
         },
@@ -153,9 +174,12 @@ function deleteEntry(){
         url: 'php/deleteentry.php',
         type: 'post',
         dataType: 'json',
-        data: {'id': $value},
+        data: {
+            'bookName' : bookName,
+            'id': $value
+        },
         success: function(json) {
-            if(!json.boolean){
+            if(!json.success){
                 window.alert("Entry was not deleted, an error occured");
             } else {
                 window.alert("You have successfully deleted this entry");
@@ -190,6 +214,7 @@ function changeEntry(){
         url: 'php/editentry.php',
         type: 'post',
         data: {
+            'bookName' : bookName,
             'id': $value,
             'fn': $("input[name=firstname]").val(), 
             'ln': $("input[name=lastname]").val(),
@@ -263,4 +288,8 @@ function clearTextBoxes(){
 	$("input[name=zip]").val("");
 	$("input[name=phone]").val("");
 	$("input[name=email]").val("");
+}
+
+function test(){
+    window.alert(bookName);
 }
