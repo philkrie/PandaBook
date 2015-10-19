@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>Panda Book</title>
+	<script type="text/javascript" src="js/jquery-2.1.4.min.js"></script>
+	<link href="css/bootstrap.css" rel="stylesheet"/>
+	<link href="css/style.css" rel="stylesheet"/>
+	<script type="text/javascript" src="js/bootstrap.js"></script>
+    <script type="text/javascript" src="js/login-app.js"></script>
+<head>
+	<body>
+<div id="login">
+    <form name="login" action="php/credentials.php" method="post" accept-charset="utf-8">
+            <input type="text" name="username" placeholder="username" required></li>
+            <input type="password" name="password" placeholder="password" required></li>
+            <button id="credentials-btn" type="button" class="btn btn-default" onclick='credentials()'>Submit</button>
+    </form>
+</div>
+<div id="failure">
+    <h1>Invalid login credentials. Please try again</h1>
+</div>
+                    <div id="address-books">
+						<div class="col-sm-8 col-sm-offset-2">
+							<select id="entrylist" size="24" onchange="viewEntry(this.value)">
+                                
+                            </select>
+                            <div id="create-space">
+                            <label>New Address Book Name</label>
+                            <input id="addbook" type="text" name="addbook"></input>
+                            <button id="add-book-btn" type="button" class="btn btn-default" onclick="addBook()">Create New Address Book</button>
+                            <button id="select-book-btn" type="button" class="btn btn-default" onclick="chooseBook()">Choose Book</button>
+                            </div>
+						</div>
+</div>
+</body>
+</html>

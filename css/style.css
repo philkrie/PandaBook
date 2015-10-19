@@ -54,3 +54,19 @@ input[disabled]{
 #footer {
     height: 200px;
 }
+
+#login {
+    width:400px;
+    margin-right:auto;
+    margin-left:auto;
+    margin-top: 100px;
+}
+
+#credentials-btn{
+    margin: 0 auto;
+    width: 400px;
+}
+
+#create-space{
+    display: inline;
+}
