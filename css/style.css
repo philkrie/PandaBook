@@ -1,8 +1,28 @@
+body {
+   height: 100vh;
+   background-image: url("../img/panda.png");
+   background-size: 10%;
+   background-position: right bottom; /*Positioning*/
+   background-repeat: no-repeat; /*Prevent showing multiple background images*/
+}
+
 h1, h2 {
 	text-align: center;
 }
 
+select{
+    width: 100%;
+}
+
 #panda-pic {
 	width: 100%;
-	height: auto;
+	height: 100%;
+}
+
+#header {
+    margin-bottom: 20px;
+}
+
+#footer {
+    height: 200px;
 }
