@@ -48,8 +48,8 @@ function scriptOutput()
 }
 
 // Validate parameters.
-if (!array_key_exists('bookName', $_GET))
-//if (!array_key_exists('bookName', $_POST))
+//if (!array_key_exists('bookName', $_GET))
+if (!array_key_exists('bookName', $_POST))
 {
     $scriptSuccess = False;
     $idOut = -1;
@@ -71,8 +71,8 @@ $tableName = 'address_book';       // Supply in MySQL query.
 function lookupWithDefault($POST_key, $defaultValue)
 {
      //TEST:
-     return array_key_exists($POST_key, $_GET) ? $_GET[$POST_key] : $defaultValue;
-     //return array_key_exists($POST_key, $_POST) ? $_POST[$POST_key] : $defaultValue;
+     //return array_key_exists($POST_key, $_GET) ? $_GET[$POST_key] : $defaultValue;
+     return array_key_exists($POST_key, $_POST) ? $_POST[$POST_key] : $defaultValue;
 }
 
 $fn = lookupWithDefault('fn', "");
@@ -86,8 +86,8 @@ $ph = lookupWithDefault('ph', "");
 $email = lookupWithDefault('email', "");
 
 //TEST:
-$bookName = $_GET['bookName'];
-//$bookName = $_POST['bookName'];
+//$bookName = $_GET['bookName'];
+$bookName = $_POST['bookName'];
 
 
 // ============================================================================
