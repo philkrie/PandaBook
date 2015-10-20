@@ -40,9 +40,17 @@ mysql_connect('ix-trusty:3022','xunl','tbc123bl') or die("Could not connect: " .
 // Select the database containing address books.
 mysql_select_db($dbName) or die("Could not find database: " . mysql_error() );
 
+$sort = $_GET['sort'];
+$bookName = $_GET['bookName'];
+
+
 // Construct & execute MySQL query to select rows from the database.
 //TODO: Don't assume the field is named last_name, use constant/keyMap below.
-$sql = "SELECT * FROM $tableName ORDER BY last_name";    // Select all.
+if($sort == "name"){
+    $sql = "SELECT * FROM $tableName WHERE bookName = '$bookName' ORDER BY last_name";    // Select all.
+} else {
+    $sql = "SELECT * FROM $tableName WHERE bookName = '$bookName' ORDER BY zip";    // Select all.
+}
 $queryResult = mysql_query($sql);
 
 

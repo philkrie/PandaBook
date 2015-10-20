@@ -38,7 +38,7 @@ function scriptOutput()
 
 // Validate parameters.
 //if (!array_key_exists('user', $_GET) or !array_key_exists('pass', $_GET))
-if (!array_key_exists('user', $POST) or !array_key_exists('pass', $POST))
+if (!array_key_exists('user', $_POST) or !array_key_exists('pass', $_POST))
 {
     $scriptSuccess = False;
     $scriptDebug = "Insufficient login information.";
