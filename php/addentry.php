@@ -42,6 +42,7 @@ $tableName = 'address_book';       // Supply in MySQL query.
 // ============================================================================
 //TODO: determine whether this error checking should be done here.
 
+$bookName = array_key_exists('bookName', $_POST) ? $_POST['bookName'] : "";
 $fn = array_key_exists('fn', $_POST) ? $_POST['fn'] : "";
 $ln = array_key_exists('ln', $_POST) ? $_POST['ln'] : "";
 $city = array_key_exists('city', $_POST) ? $_POST['city'] : "";

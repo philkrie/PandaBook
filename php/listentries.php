@@ -47,9 +47,9 @@ $bookName = $_GET['bookName'];
 // Construct & execute MySQL query to select rows from the database.
 //TODO: Don't assume the field is named last_name, use constant/keyMap below.
 if($sort == "name"){
-    $sql = "SELECT * FROM $tableName WHERE bookName = '$bookName' ORDER BY last_name";    // Select all.
+    $sql = "SELECT * FROM $tableName WHERE address_book_ID = '$bookName' ORDER BY last_name";    // Select all.
 } else {
-    $sql = "SELECT * FROM $tableName WHERE bookName = '$bookName' ORDER BY zip";    // Select all.
+    $sql = "SELECT * FROM $tableName WHERE address_book_ID = '$bookName' ORDER BY zip";    // Select all.
 }
 $queryResult = mysql_query($sql);
 
