@@ -210,16 +210,16 @@ function deleteEntry(){
 }
 
 function editEntry(){
-    //if($('#entrylist')[0].selectedIndex == -1){
-    //    window.alert("You must have an entry selected in order to edit")
-    //} else {
+    if($('#entrylist')[0].selectedIndex == -1){
+        window.alert("You must have an entry selected in order to edit");
+    } else {
         $("#entries").animate({ opacity: 0 });
         $("#edit-btn").fadeOut(300);
         $("#cancel-btn").show();
         $("#change-btn").show();
         toggleTextBoxes(false);
     } 
-//}
+}
 
 function changeEntry(){
     //TODO: NEEDS INPUT VALIDATION AND VIEW
