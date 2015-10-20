@@ -2,83 +2,175 @@
 
 <?php
 
-/*
-<!-- ==========================================================================
-     * addentry.php
-     *
-     * Author: M.Ishii
-     * Date:   2015-10-10
-     *
-     * Desc.:  Given arguments for fn, ln, city, st, zip, ph, and email
-     *         (first name, last name, city, state, zip, phone, and email)
-     *         creates a new entry in the address book database table and
-     *         returns the id of the new entry. For this stub, the database is
-     *         not accessed; returned data is hard-coded.
-     *
-     * How to access returned data: There is a div element with attribute
-     * id=personidHolder and custom attribute data-personid (type: int)
-     * indicating the entry of the new row. In this stub, returned ids are
-     * not guaranteed to be unique.
-     ==========================================================================
--->
+// ==========================================================================
+// * addentry.php
+// *
+// * Author: M.Ishii
+// * Date:   2015-10-10
+// * Modified: 2015-10-19
+// *
+// * Desc.:   Adds a new entry to the specified address book (no duplicates).
+// *
+// * Inputs:  [POST] 'bookName' (String), 'fn' (String), 'ln' (String),
+// *                 'addr1' (String), 'addr2' (String), 'city' (String),
+// *                 'st' (String), 'zip' (String),
+// *                 'ph' (String), 'email (String)
+// *
+// * Outputs: 'success' (Boolean), 'id' (Int), 'debug': DebugInfo
+// *
+// ==========================================================================
 
-<!-- Code contributed in part from tutorial at
-     w3schools.com/php/php_ajax_database.asp and from guidance at
-     www.w3.org/TR/2011/WD-html5-20110525/elements.html
--->
-*/
+// Code contributed in part from tutorial at
+// w3schools.com/php/php_ajax_database.asp and from guidance at
+// www.w3.org/TR/2011/WD-html5-20110525/elements.html
+//
 
 
 // ============================================================================
-// Constants/parameters expected to change.
+// Script initialization.
 // ============================================================================
 
+// Inclusions.
+require_once 'utils.php';
+
+// Script output initialization.
+$scriptSuccess = False;
+$idOut = -1;
+$scriptDebug = NULL;
+
+// Script JSON output format (using above globals).
+function scriptOutput()
+{
+    global $scriptSuccess, $idOut, $scriptDebug;
+
+    $scriptReturn = array('success'=>$scriptSuccess, 'id'=>$idOut, 'debug'=>$scriptDebug);
+    echo json_encode($scriptReturn);
+}
+
+// Validate parameters.
+if (!array_key_exists('bookName', $_GET))
+//if (!array_key_exists('bookName', $_POST))
+{
+    $scriptSuccess = False;
+    $idOut = -1;
+    $scriptDebug = "No argument for parameter 'bookName'.";
+
+    scriptOutput();
+    die();
+}
+
+// Constants & static parameters.
 $dbName = 'panda_address_book';    // Supply to mysql_select_db().
 $tableName = 'address_book';       // Supply in MySQL query.
 
 
 // ============================================================================
-// Grab URL arguments, assuming _POST was used.
+// Grab script arguments and assign default values.
 // ============================================================================
-//TODO: determine whether this error checking should be done here.
 
-$fn = array_key_exists('fn', $_POST) ? $_POST['fn'] : "";
-$ln = array_key_exists('ln', $_POST) ? $_POST['ln'] : "";
-$city = array_key_exists('city', $_POST) ? $_POST['city'] : "";
-$st = array_key_exists('st', $_POST) ? $_POST['st'] : "";
-$zip = array_key_exists('zip', $_POST) ? $_POST['zip'] : "";
-$ph = array_key_exists('ph', $_POST) ? $_POST['ph'] : "";
-$email = array_key_exists('email', $_POST) ? $_POST['email'] : "";
+function lookupWithDefault($POST_key, $defaultValue)
+{
+     //TEST:
+     return array_key_exists($POST_key, $_GET) ? $_GET[$POST_key] : $defaultValue;
+     //return array_key_exists($POST_key, $_POST) ? $_POST[$POST_key] : $defaultValue;
+}
 
-//TODO: Grab address 1 and address 2 from _POST param list.
-$addr1 = "Test1"; // address line 1.";
-$addr2 = "Test2"; // address line 2.";
+$fn = lookupWithDefault('fn', "");
+$ln = lookupWithDefault('ln', "");
+$addr1 = lookupWithDefault('addr1', "");
+$addr2 = lookupWithDefault('addr2 ', "");
+$city = lookupWithDefault('city', "");
+$st = lookupWithDefault('st', "");
+$zip = lookupWithDefault('zip', "");
+$ph = lookupWithDefault('ph', "");
+$email = lookupWithDefault('email', "");
+
+//TEST:
+$bookName = $_GET['bookName'];
+//$bookName = $_POST['bookName'];
 
 
 // ============================================================================
 // Connect to and modify the database.
 // ============================================================================
 
+// Call this with debug info if connection fails or database not found.
+function accessFail($debug)
+{
+    global $scriptSuccess, $idOut, $scriptDebug;
+
+    $scriptSuccess = False;
+    $idOut = -1;
+    $scriptDebug = $debug;
+    scriptOutput();
+    die();
+}
+
+
 // Connect to the MySQL server process.
 //TODO: Use a .cnf file instead of hardcoding the MySQL login.
-mysql_connect('ix-trusty:3022','xunl','tbc123bl') or die("Could not connect: " . mysql_error() );
+mysql_connect('ix-trusty:3022','xunl','tbc123bl') or accessFail("Could not connect: " . mysql_error() );
 
 // Select the database containing address books.
-mysql_select_db($dbName) or die("Could not find database: " . mysql_error() );
+mysql_select_db($dbName) or accessFail("Could not find database: " . mysql_error() );
 
+// Test that the specified address book already exists.
+doesBookExist($bookName) or accessFail("Could not find address book: " . $bookName);
 
-// Construct & execute MySQL query to add row to the database.
-//TODO: Don't assume the field is named last_name, use constant/keyMap below.
-//TODO: Use keyMap or something.
-//TODO: Put in addr1, addr2.
+// Branch: If there is an exact match, set id and go on to return;
+//         If there is not, insert the row and get the new id.
 
-$sql = "INSERT INTO $tableName (first_name, last_name, city, state, zip, phone, email) VALUES ('$fn', '$ln', '$city', '$st', '$zip', '$ph', '$email')";
-$querySuccess = mysql_query($sql);
+// If there is an exact match, return the id (arbitrarily picked if multiple).
+// Otherwise, return NULL.
+function getIdOfExactMatch($fn, $ln, $city, $st, $zip, $ph, $email, $addr1, $addr2, $bookName)
+{
+     global $tableName;
 
+     $sql = "SELECT * FROM $tableName
+             WHERE first_name = '$fn' AND
+             last_name = '$ln' AND
+             city = '$city' AND
+             state = '$st' AND
+             zip = '$zip' AND
+             phone = '$ph' AND
+             email = '$email' AND
+             address_1 = '$addr1' AND
+             address_2 = '$addr2' AND
+             address_book_ID = '$bookName' ";
 
-// On success: return True. On failure: return False.
-echo json_encode($querySuccess);   // Assumes that mysql_query has returned a bool.
+     $queryResult = mysql_query($sql);
 
+     if (mysql_num_rows($queryResult) > 0)
+     {
+          $row = mysql_fetch_assoc($queryResult);
+          $id = $row['person_ID'];
+          return $id;
+     }
+     else
+          return NULL;
+}
+
+// Will be NULL if no duplicate, otherwise id of existing entry.
+$idOut = getIdOfExactMatch($fn, $ln, $city, $st, $zip, $ph, $email, $addr1, $addr2, $bookName);
+
+if (is_null($idOut))
+{
+     // Ok to enter new entry now.
+
+     // Construct & execute MySQL query to add row to the database. (Note: order matters here!)
+     $sql = "INSERT INTO $tableName (first_name, last_name, city, state, zip, phone, email, address_1, address_2, address_book_ID) VALUES ('$fn', '$ln', '$city', '$st', '$zip', '$ph', '$email', '$addr1', '$addr2', '$bookName')";
+     //$querySuccess = mysql_query($sql);
+     mysql_query($sql);
+
+     // Get ID of newly created entry.
+     $idOut = getIdOfExactMatch($fn, $ln, $city, $st, $zip, $ph, $email, $addr1, $addr2, $bookName);
+}
+
+// Put idOut inside the overall return object and return JSON encoding of it.
+$scriptSuccess = True;
+scriptOutput();
+
+// Close connection to the MySQL server process.
 mysql_close();
 
 ?>

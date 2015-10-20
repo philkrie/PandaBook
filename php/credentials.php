@@ -38,7 +38,7 @@ function scriptOutput()
 
 // Validate parameters.
 //if (!array_key_exists('user', $_GET) or !array_key_exists('pass', $_GET))
-if (!array_key_exists('user', $POST) or !array_key_exists('pass', $POST))
+if (!array_key_exists('user', $_POST) or !array_key_exists('pass', $_POST))
 {
     $scriptSuccess = False;
     $scriptDebug = "Insufficient login information.";
@@ -87,7 +87,7 @@ mysql_connect('ix-trusty:3022','xunl','tbc123bl') or accessFail("Could not conne
 mysql_select_db($dbName) or accessFail("Could not find database: " . mysql_error() );
 
 // Construct & execute MySQL query to find match(es) for the login.
-$sql = "SELECT * FROM $tableName WHERE user = '$user' AND pass = '$pass'";   // For some reason, the system does not like the password we chose...
+$sql = "SELECT * FROM $tableName WHERE user = '$user' AND password = '$pass'";
 $queryResult = mysql_query($sql);
 
 
@@ -98,12 +98,6 @@ $queryResult = mysql_query($sql);
 $scriptSuccess = True;
 $loginOk = (mysql_num_rows($queryResult) >= 1);    // Count matches.
 scriptOutput();
-
-/*
-//TEST:
-echo mysql_num_rows($queryResult);
-*/
-
 
 mysql_close();
 
