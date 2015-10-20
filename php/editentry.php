@@ -3,15 +3,16 @@
 <?php
 
 // ==========================================================================
-// * addentry.php
+// * editentry.php
 // *
 // * Author: M.Ishii
 // * Date:   2015-10-10
-// * Modified: 2015-10-19
+// * Modified: 2015-10-20
 // *
-// * Desc.:   Adds a new entry to the specified address book (no duplicates).
+// * Desc.:   Modifies an existing entry in the specified address book.
 // *
-// * Inputs:  [POST] 'bookName' (String), 'fn' (String), 'ln' (String),
+// * Inputs:  [POST] 'bookName' (String), 'id' (Int),
+// *                 'fn' (String), 'ln' (String),
 // *                 'addr1' (String), 'addr2' (String), 'city' (String),
 // *                 'st' (String), 'zip' (String),
 // *                 'ph' (String), 'email (String)
@@ -24,6 +25,12 @@
 // w3schools.com/php/php_ajax_database.asp and from guidance at
 // www.w3.org/TR/2011/WD-html5-20110525/elements.html
 //
+
+// The code is essentially the same as for addentry.php, just
+// with the cases rearranged.
+//
+
+// Note: This implementation does not check for duplicates!
 
 
 // ============================================================================
@@ -91,7 +98,7 @@ $bookName = $_POST['bookName'];
 
 
 // ============================================================================
-// Connect to and modify the database.
+// Connect to the database.
 // ============================================================================
 
 // Call this with debug info if connection fails or database not found.
@@ -117,8 +124,23 @@ mysql_select_db($dbName) or accessFail("Could not find database: " . mysql_error
 // Test that the specified address book already exists.
 doesBookExist($bookName) or accessFail("Could not find address book: " . $bookName);
 
-// Branch: If there is an exact match, set id and go on to return;
-//         If there is not, insert the row and get the new id.
+
+// ============================================================================
+// Function doesIdExist() - Game-changer conditions checker (see below).
+// ============================================================================
+
+// Pre:     A connection to the DB server has been established, a database is selected.
+// Returns: True if the specified ID is in the specified book, otherwise False.
+function doesIdExist($id, $bookName)
+{
+    $sql = "SELECT * FROM $tableName WHERE person_ID = $id AND address_book_ID = '$bookName'";
+    $queryResult = mysql_query($sql);
+    return (mysql_num_rows($queryResult) > 0);
+}
+
+// ============================================================================
+// Utility function getIdOfExactMatch() - Needed to get id from newly created entry.
+// ============================================================================
 
 // If there is an exact match, return the id (arbitrarily picked if multiple).
 // Otherwise, return NULL.
@@ -150,21 +172,49 @@ function getIdOfExactMatch($fn, $ln, $city, $st, $zip, $ph, $email, $addr1, $add
           return NULL;
 }
 
-// Will be NULL if no duplicate, otherwise id of existing entry.
-$idOut = getIdOfExactMatch($fn, $ln, $city, $st, $zip, $ph, $email, $addr1, $addr2, $bookName);
 
-if (is_null($idOut))
+// ============================================================================
+// Branch: If there is an entry with the specified id, update that entry (get new id).
+//         If there is not, or no id was specified, insert the row and get the new id.
+//         (No checking for duplicates in either case.)
+// ============================================================================
+
+if (array_key_exists('id', $_POST) and doesIdExist(intval($_POST['id'])) )
 {
-     // Ok to enter new entry now.
+    // In this case, update an existing entry.
 
-     // Construct & execute MySQL query to add row to the database. (Note: order matters here!)
-     $sql = "INSERT INTO $tableName (first_name, last_name, city, state, zip, phone, email, address_1, address_2, address_book_ID) VALUES ('$fn', '$ln', '$city', '$st', '$zip', '$ph', '$email', '$addr1', '$addr2', '$bookName')";
-     //$querySuccess = mysql_query($sql);
-     mysql_query($sql);
+    $id = intval($_POST['id']);
 
-     // Get ID of newly created entry.
-     $idOut = getIdOfExactMatch($fn, $ln, $city, $st, $zip, $ph, $email, $addr1, $addr2, $bookName);
+    $sql = "UPDATE $tableName
+            SET first_name = '$fn',
+            last_name = '$ln',
+            city = '$city',
+            state = '$st',
+            zip = '$zip',
+            phone = '$ph',
+            email = '$email',
+            address_1 = '$addr1',
+            address_2 = '$addr2'
+
+            WHERE person_ID = $id ";
+
+    mysql_query($sql);
+
+    $idOut = $id;
 }
+else
+{
+    // In this case, insert a new entry.
+
+    // Construct & execute MySQL query to add row to the database. (Note: order matters here!)
+    $sql = "INSERT INTO $tableName (first_name, last_name, city, state, zip, phone, email, address_1, address_2, address_book_ID)
+            VALUES ('$fn', '$ln', '$city', '$st', '$zip', '$ph', '$email', '$addr1', '$addr2', '$bookName')";
+    mysql_query($sql);
+
+    // Get ID of newly created entry.
+    $idOut = getIdOfExactMatch($fn, $ln, $city, $st, $zip, $ph, $email, $addr1, $addr2, $bookName);
+}
+
 
 // Put $idOut inside the overall return object and return JSON encoding of it.
 $scriptSuccess = True;
