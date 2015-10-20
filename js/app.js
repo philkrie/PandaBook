@@ -20,27 +20,21 @@ function viewEntry(value) {
         type: 'get',
         data: {
             'bookName': bookName,
-            'id': value},
+            'id': value
+        },
         dataType: 'json',
         success: function (json) {
-            //window.alert("viewEntry activated");
             $.each(json, function(i, item) {
-	           if(typeof item == 'object') {
-                   if(item.success){
-                        $("input[name=firstname]").val(item.entryData.firstname);
-                        $("input[name=lastname]").val(item.entryData.lastname);
-                        $("input[name=addr1]").val(item.entryData.addr1);
-                        $("input[name=addr2]").val(item.entryData.addr2);
-                        $("input[name=city]").val(item.entryData.city);
-                        $("input[name=state]").val(item.entryData.state);
-                        $("input[name=zip]").val(item.entryData.zip);
-                        $("input[name=phone]").val(item.entryData.phone);
-                        $("input[name=email]").val(item.entryData.email);
-                   } else {
-                       window.alert("Failed to display entries");
-                   }
-                
-               }
+               
+                $("input[name=firstname]").val(item.firstname);
+                $("input[name=lastname]").val(item.lastname);
+                $("input[name=addr1]").val(item.addr1);
+                $("input[name=addr2]").val(item.addr2);
+                $("input[name=city]").val(item.city);
+                $("input[name=state]").val(item.state);
+                $("input[name=zip]").val(item.zip);
+                $("input[name=phone]").val(item.phone);
+                $("input[name=email]").val(item.email);
             })
         },
         error: function(xhr, desc, err) {
@@ -142,9 +136,30 @@ function listEntries(value){
         dataType: 'json',
         success: function (json) {
             //window.alert("listEntries activated");
-            $.each(json, function(i, item) {
-                if(typeof item == 'object') {
-                    if(item.success){
+            if(value == 'name'){
+                $.each(json, function(i, item) {
+                    if(typeof item == 'object') {
+                        $('#entrylist').append($('<option/>', { 
+                            value: item.id,
+                            text :  item.lastname + ", " + item.firstname
+                        }))
+                    }
+                })
+            } else {
+                $.each(json, function(i, item) {
+                    if(typeof item == 'object') {
+                        $('#entrylist').append($('<option/>', { 
+                            value: item.id,
+                            text :  item.zip + "   " + item.lastname + ", " + item.firstname
+                        }))
+                    }
+                })
+            }
+                
+            
+                    
+                    
+                    /*if(item.success){
                         for( var i = 0; i < item.entryList.length; i++){
                             $('#entrylist').append($('<option/>', { 
                                 value: item.entryList[i].id,
@@ -153,10 +168,9 @@ function listEntries(value){
                         }
                     } else {
                         window.alert("Failure to list entries");
-                    }
+                    }*/
                     
-               }
-            })
+          
         },
         error: function(xhr, desc, err) {
             console.log(xhr);
@@ -179,7 +193,7 @@ function deleteEntry(){
             'id': $value
         },
         success: function(json) {
-            if(!json.success){
+            if(!json.boolean){
                 window.alert("Entry was not deleted, an error occured");
             } else {
                 window.alert("You have successfully deleted this entry");

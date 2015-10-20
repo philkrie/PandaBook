@@ -41,25 +41,26 @@ function credentials() {
 }
 
 function listBooks(){
+    $("#booklist option").remove();
     "use strict";
     $.ajax({
         url: 'php/listbooks.php',
         type: 'get',
         dataType: 'json',
         success: function (json) {
-            window.alert("listbooks activated");
-            $.each(json, function(i, item) {
-                if(typeof item == 'object') {
-                    if(item.success){
-                        for( var i = 0; i < item.bookList.length; i++){
+            $.each(json, function(i, item){ {
+                    $('#booklist').append($('<option/>', { 
+                                text :  item.bookName
+                            }))
+                        /*for( var i = 0; i < item.bookList.length; i++){
                             $('#booklist').append($('<option/>', { 
                                 text :  item.bookList[i].BookName
                             }))
                         }
                         if(item.lastBook != null){
                             window.open("book.html?bookName=" + item.lastBook);
-                        }
-                    }
+                        }*/
+                    
                 }
             })
         },
@@ -79,16 +80,14 @@ function addBook(){
         dataType: 'json',
         success: function (json) {
             window.alert("addbook activated");
-            $.each(json, function(i, item) {
-                if(typeof item == 'object') {
-                    if(item.success){
+                    if(json.success){
                         window.alert("Addbook successfully added");
                         listBooks();
                     } else {
                         window.alert("Addbook not added");
+                        window.alert(json.debug);
                     }
-                }
-            })
+                
         },
         error: function(xhr, desc, err) {
             console.log(xhr);

@@ -42,8 +42,6 @@ mysql_select_db($dbName) or die("Could not find database: " . mysql_error() );
 
 $sort = $_GET['sort'];
 $bookName = $_GET['bookName'];
-
-
 // Construct & execute MySQL query to select rows from the database.
 //TODO: Don't assume the field is named last_name, use constant/keyMap below.
 if($sort == "name"){
@@ -72,7 +70,7 @@ $fakeTable = array(
 // ============================================================================
 
 // Declare connector to naming scheme of database: keyMap[phpName] == mysqlName
-$keyMap = array('id'=>'person_ID', 'firstname'=>'first_name', 'lastname'=>'last_name');
+$keyMap = array('id'=>'person_ID', 'firstname'=>'first_name', 'lastname'=>'last_name', 'zip'=>'zip');
 
 // Input: Row of db table.
 // Precondition: The input row has columns named like values of keyMap.

@@ -56,7 +56,7 @@ mysql_select_db($dbName) or die("Could not find database: " . mysql_error() );
 
 // Construct & execute MySQL query to select rows from the database.
 //TODO: Don't assume the field is named last_name, use constant/keyMap below.
-$sql = "SELECT * FROM $tableName WHERE person_ID = $id AND address_book_ID = $bookName";  // Select entry w/ specified id.
+$sql = "SELECT * FROM $tableName WHERE person_ID = '$id' AND address_book_ID = '$bookName'";  // Select entry w/ specified id.
 //$sql = "SELECT * FROM $tableName ORDER BY last_name";    // Select all.
 $queryResult = mysql_query($sql);
 
@@ -88,7 +88,7 @@ $row = $entryList[$id];
 // ============================================================================
 
 // Declare connector to naming scheme of database: keyMap[phpName] == mysqlName
-$keyMap = array('id'=>'person_ID', 'firstname'=>'first_name', 'lastname'=>'last_name', 'city'=>'city', 'state'=>'state', 'zip'=>'zip', 'phone'=>'phone', 'email'=>'email');
+$keyMap = array('id'=>'person_ID', 'firstname'=>'first_name', 'lastname'=>'last_name', 'addr1'=>'addr1', 'addr2'=>'addr2', 'city'=>'city', 'state'=>'state', 'zip'=>'zip', 'phone'=>'phone', 'email'=>'email');
 
 // Input: Row of db table.
 // Precondition: The input row has columns named like values of keyMap.
