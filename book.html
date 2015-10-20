@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>Panda Book</title>
+	<script type="text/javascript" src="js/jquery-2.1.4.min.js"></script>
+	<link href="css/bootstrap.css" rel="stylesheet"/>
+	<link href="css/style.css" rel="stylesheet"/>
+	<script type="text/javascript" src="js/bootstrap.js"></script>
+    <script type="text/javascript" src="js/app.js"></script>
+<head>
+	<body>
+		<!--HEADER: Title and description-->
+		<div id="header">
+			<div class="container">
+				<div class = "row">
+					<h1>Panda Book</h2>
+					<h2>Your address book but now with 100% more panda</h2>
+				</div>
+			</div>
+		</div>
+		<div id="interface">
+			<div class="container">
+				<div class = "row">
+                    <!--ENTRY LIST: Entries shown in this list-->
+					<div id="entries">
+						<div class=col-sm-6>
+							<select id="entrylist" size="24" onchange="viewEntry(this.value)">
+                                
+                            </select>
+                            <button id="add-btn" type="button" class="btn btn-default" onclick="addEntry()">Add</button>
+                            <button id="delete-btn" type="button" class="btn btn-default" onclick="deleteEntry()">Delete</button>
+                            <label>Sort By</label>
+                            <button id="name-sort-btn" type="button" class="btn btn-default" onclick='listEntries("name")'>Last Name</button>
+                            <button id="zip-sort-btn" type="button" class="btn btn-default" onclick='listEntries("zip")'>Zip Code</button>
+						</div>
+					</div>
+					<!--INFORMATION CARD: Shows address information, allows edits to be made here-->
+					<div id="info">
+						<div class=col-sm-6>
+							<form>
+								First Name:<br>
+								<input id="firstname" type="text" name="firstname" disabled></input>
+								<br>
+								Last Name:<br>
+								<input type="text" name="lastname" disabled></input>
+								<br>
+                                Address Line 1:<br>
+								<input id="addr1" type="text" name="addr1" disabled></input>
+								<br>
+                                Address Line 2:<br>
+								<input id="addr2" type="text" name="addr2" disabled></input>
+								<br>
+								City:<br>
+								<input type="text" name="city" disabled></input>
+								<br>
+								State:<br>
+								<input type="text" name="state" disabled></input>
+								<br>
+								Zip Code:<br>
+								<input type="text" name="zip" disabled></input>
+								<br>
+								Phone #:<br>
+								<input type="text" name="phone" disabled></input>
+								<br>
+								E-mail Address:<br>
+								<input type="text" name="email" disabled></input>
+							</form>
+                            <button id="edit-btn" type="button" class="btn btn-default" onclick="editEntry()">Edit</button>
+                            <button id="submit-btn" type="button" class="btn btn-default" onclick="submitEntry()">Submit</button>
+                            <button id="change-btn" type="button" class="btn btn-default" onclick="changeEntry()">Change</button>
+                            <button id="cancel-btn" type="button" class="btn btn-default" onclick="cancelEntry()">Cancel</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!--FOOTER
+		<div id="footer">
+			<div class="container footer">
+				<div class = "row">
+					<div class="col-xs-2 col-xs-offset-11">
+						<img id="panda-pic" src="img/panda.png"/>
+					</div>
+				</div>
+			</div>
+		</div> -->
+
+
+	<body>
+</html>

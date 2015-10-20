@@ -7,81 +7,33 @@
 	<link href="css/bootstrap.css" rel="stylesheet"/>
 	<link href="css/style.css" rel="stylesheet"/>
 	<script type="text/javascript" src="js/bootstrap.js"></script>
-    <script type="text/javascript" src="js/app.js"></script>
+    <script type="text/javascript" src="js/login-app.js"></script>
 <head>
 	<body>
-		<!--HEADER: Title and description-->
-		<div id="header">
-			<div class="container">
-				<div class = "row">
-					<h1>Panda Book</h2>
-					<h2>Your address book but now with 100% more panda</h2>
-				</div>
-			</div>
-		</div>
-		<div id="interface">
-			<div class="container">
-				<div class = "row">
-					<!--INFORMATION CARD: Shows address information, allows edits to be made here-->
-					<div id="info">
-						<div class=col-sm-6>
-							<form>
-								First Name:<br>
-								<input id="firstname" type="text" name="firstname" disabled></input>
-								<br>
-								Last Name:<br>
-								<input type="text" name="lastname" disabled></input>
-								<br>
-                                Address Line 1:<br>
-								<input id="addr1" type="text" name="addr1" disabled></input>
-								<br>
-                                Address Line 2:<br>
-								<input id="addr2" type="text" name="addr2" disabled></input>
-								<br>
-								City:<br>
-								<input type="text" name="city" disabled></input>
-								<br>
-								State:<br>
-								<input type="text" name="state" disabled></input>
-								<br>
-								Zip Code:<br>
-								<input type="text" name="zip" disabled></input>
-								<br>
-								Phone #:<br>
-								<input type="text" name="phone" disabled></input>
-								<br>
-								E-mail Address:<br>
-								<input type="text" name="email" disabled></input>
-							</form>
-                            <button id="edit-btn" type="button" class="btn btn-default">Edit</button>
-                            <button id="submit-btn" type="button" class="btn btn-default" onclick="submitEntry()">Submit</button>
-                            <button id="cancel-btn" type="button" class="btn btn-default" onclick="cancelEntry()">Cancel</button>
-                            <button id="add-btn" type="button" class="btn btn-default" onclick="addEntry()">Add</button>
-						</div>
-					</div>
-					<!--ENTRY LIST: Entries shown in this list-->
-					<div id="entries">
-						<div class=col-sm-6>
-							<select id="entrylist" size="19" onchange="viewEntry(this.value)">
-                                
+<div id="login">
+    <form name="login">
+            <input type="text" name="username" placeholder="username" required>
+            <input type="password" name="password" placeholder="password" required>
+            <button id="credentials-btn" type="button" class="btn btn-default" onclick='credentials()'>Submit</button>
+    </form>
+</div>
+<div id="failure">
+    <h1>Invalid login credentials. Please try again</h1>
+</div>
+                    <div id="address-books">
+						<div class="col-sm-8 col-sm-offset-2">
+							<select id="booklist" size="24">
+                                <option>PLEASE DEAR GOD</option>
+                                <option>YES</option>
                             </select>
+                            <button id="select-book-btn" type="button" class="btn btn-default" onclick="chooseBook()">Choose Book</button>
+                            <br>
+                            <div id="create-space">
+                                <label>New Address Book Name</label>
+                                <input id="addbook" type="text" name="addbook"></input>
+                                <button id="add-book-btn" type="button" class="btn btn-default" onclick="addBook()">Create New Address Book</button>
+                            </div>
 						</div>
-                        <button id="delete-btn" type="button" class="btn btn-default" onclick="deleteEntry()">Delete</button>
-					</div>
-				</div>
-			</div>
-		</div>
-		<!--FOOTER
-		<div id="footer">
-			<div class="container footer">
-				<div class = "row">
-					<div class="col-xs-2 col-xs-offset-11">
-						<img id="panda-pic" src="img/panda.png"/>
-					</div>
-				</div>
-			</div>
-		</div> -->
-
-
-	<body>
+</div>
+</body>
 </html>

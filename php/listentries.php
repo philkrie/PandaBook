@@ -1,29 +1,16 @@
 <?php
 
 // ==========================================================================
-// * listentries.php
+// * getlist.php (stub)
 // *
 // * Author:   M.Ishii
-// * Project:  PandaBook
 // * Date:     2015-10-10
-// * Modified: 2015-10-18
+// * Modified: 2015-10-12
 // *
-// * Desc.: Yields sorted list of IDs, names, and zip codes from the specified address book.
-// *
-// * Inputs:   [GET] 'bookName' (String), 'sort' (String)
-// *
-// * Returns:  {'success' (Boolean),
-// *
-// *            'entryList': [{'id': (Int),
-// *                           'lastname' (String),
-// *                           'firstname': (String),
-// *                           'zip': (String)},
-// *
-// *                          {'id': (Int), ...},
-// *                          ... ],
-// *
-// *            'debug': DebugInfo }
-// *
+// * Desc.:  Returns JSON array of IdName objects for each entry in the
+// *         address book, like [{"id":?, "fn":?, "ln":?}, {...}, ...].
+
+// TODO: Insert mysql queries.
 // ==========================================================================
 
 // Code contributed in part from tutorial at
@@ -33,11 +20,59 @@
 
 
 // ============================================================================
-// Define extractor/connector code to interface with db naming scheme. (Static)
+// Constants/parameters expected to change.
+// ============================================================================
+
+$dbName = 'panda_address_book';    // Supply to mysql_select_db().
+$tableName = 'address_book';       // Supply in MySQL query.
+// <Define $maxEntriesToReturn.>
+// <Define $sortOrder.>
+
+
+// ============================================================================
+// Connect to and query the database.
+// ============================================================================
+
+// Connect to the MySQL server process.
+//TODO: Use a .cnf file instead of hardcoding the MySQL login.
+mysql_connect('ix-trusty:3022','xunl','tbc123bl') or die("Could not connect: " . mysql_error() );
+
+// Select the database containing address books.
+mysql_select_db($dbName) or die("Could not find database: " . mysql_error() );
+
+$sort = $_GET['sort'];
+$bookName = $_GET['bookName'];
+
+
+// Construct & execute MySQL query to select rows from the database.
+//TODO: Don't assume the field is named last_name, use constant/keyMap below.
+if($sort == "name"){
+    $sql = "SELECT * FROM $tableName WHERE bookName = '$bookName' ORDER BY last_name";    // Select all.
+} else {
+    $sql = "SELECT * FROM $tableName WHERE bookName = '$bookName' ORDER BY zip";    // Select all.
+}
+$queryResult = mysql_query($sql);
+
+
+// ============================================================================
+// Fabricated table data for stub.
+// ============================================================================
+
+$fakeTable = array(
+    array('id' => 1, 'first_name' => 'Linus', 'last_name' => 'Torvalds'),
+    array('id' => 2, 'first_name' => 'Steve', 'last_name' => 'Jobs'),
+    array('id' => 3, 'first_name' => 'Bill', 'last_name' => 'Gates'),
+    array('id' => 4, 'first_name' => 'Bjarne', 'last_name' => 'Stroustrup'),
+    array('id' => 5, 'first_name' => 'Guido', 'last_name' => 'van Rossum')
+);
+
+
+// ============================================================================
+// Define extractor/connector code to interface with db naming scheme.
 // ============================================================================
 
 // Declare connector to naming scheme of database: keyMap[phpName] == mysqlName
-$keyMap = array('id'=>'person_ID', 'lastname'=>'last_name', 'firstname'=>'first_name', 'zip'=>'zip');
+$keyMap = array('id'=>'person_ID', 'firstname'=>'first_name', 'lastname'=>'last_name');
 
 // Input: Row of db table.
 // Precondition: The input row has columns named like values of keyMap.
@@ -65,112 +100,24 @@ function makeRow(&$dbRow)
 
 
 // ============================================================================
-// Script initialization.
-// ============================================================================
-
-// Inclusions.
-require_once 'utils.php';
-
-// Script output initialization.
-$scriptSuccess = False;
-$entryList = NULL;
-$scriptDebug = NULL;
-
-// Script JSON output format (using above globals).
-function scriptOutput()
-{
-    global $scriptSuccess, $entryList, $scriptDebug;
-
-    $scriptReturn = array('success'=>$scriptSuccess, 'entryList'=>$entryList, 'debug'=>$scriptDebug);
-    echo json_encode($scriptReturn);
-}
-
-// Validate parameters.
-if (!array_key_exists('bookName', $_GET))
-{
-    $scriptSuccess = False;
-    $entryList = NULL;
-    $scriptDebug = "No argument for parameter 'bookName'.";
-
-    scriptOutput();
-    die();
-}
-
-// Script GET/POST parameters.
-$bookName = $_GET['bookName'];
-$sort = array_key_exists('sort', $_GET) ? $_GET['sort'] : 'name';  // Defaults to 'name'.
-
-// Constants & static parameters.
-$dbName = 'panda_address_book';    // Supply to mysql_select_db().
-$tableName = 'address_book';       // Supply in MySQL query.
-
-// WISHLIST: <Define $maxEntriesToReturn.>
-
-
-// ============================================================================
-// Connect to and query the database.
-// ============================================================================
-
-// Determine DB field to sort by. (So these are DB field names.)
-switch ($sort)
-    //TODO?: Don't assume the field is named last_name, use constant/keyMap below.
-{
-    case 'name':
-        $sortOrder = 'last_name';
-        break;
-    case 'zip':
-        $sortOrder = 'zip';
-        break;
-    default:
-        $sortOrder = 'last_name';
-}
-
-// Call this with debug info if connection fails or database not found.
-function accessFail($debug)
-{
-    global $scriptSuccess, $entryList, $scriptDebug;
-
-    $scriptSuccess = False;
-    $entryList = NULL;
-    $scriptDebug = $debug;
-    scriptOutput();
-    die();
-}
-
-// Connect to the MySQL server process.
-//TODO: Move login stuff to variables outside the call to mysql_connect.
-//TODO: Use a .cnf file instead of hardcoding the MySQL login.
-mysql_connect('ix-trusty:3022','xunl','tbc123bl') or accessFail("Could not connect: " . mysql_error() );
-
-// Select the database containing address books.
-mysql_select_db($dbName) or accessFail("Could not find database: " . mysql_error() );
-
-// Test that the specified address book already exists.
-doesBookExist($bookName) or accessFail("Could not find address book: " . $bookName);
-
-// Construct & execute MySQL query to select rows from the database.
-//   Look in table $tableName for entries in book $bookName, sorted by $sortOrder.
-$sql = "SELECT * FROM $tableName WHERE address_book_ID = '$bookName' ORDER BY $sortOrder";    // Select all, sorted.
-$queryResult = mysql_query($sql);
-
-
-// ============================================================================
 // Load data into a php array; return from script w/ JSON encoding of array.
 // ============================================================================
 
-// Build array of rows like array('id'=>Id, 'ln'=>LastName, 'fn'=>FirstName, 'zip'=>Zip).
+// Build array of rows like array('id'=>Id, 'fn'=>FirstName, 'ln'=>LastName).
+
+//TODO: Verify interface w/ db, get rid of fakeTable.
+//STUB: $entryList = array_map($makeRow, $fakeTable);
+
 $entryList = [];
 while($row = mysql_fetch_assoc($queryResult))
 {
     $entryList[] = makeRow($row);
 }
 
-// Put entryList inside the overall return object and return JSON encoding of it.
-$scriptSuccess = True;
-scriptOutput();
+// Return JSON encoding of entryList; it is unnecessary to build JSON string.
+echo json_encode($entryList);
 
 // Close connection to the MySQL server process.
 mysql_close();
-
 
 ?>
