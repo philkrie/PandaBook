@@ -3,7 +3,7 @@ var lastOpen = null;
 $(document).ready(function () {
 	"use strict";
     
-    //$("#address-books").hide();
+    $("#address-books").hide();
     $("#failure").hide();
 
 });
