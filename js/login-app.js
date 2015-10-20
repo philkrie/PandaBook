@@ -62,7 +62,7 @@ function listBooks(){
                             }))
                         }
                         if(item.lastBook != null){
-                            window.open("index.html?bookName=" + item.lastBook);
+                            window.open("book.html?bookName=" + item.lastBook);
                         }
                     }
                 }
@@ -105,5 +105,5 @@ function addBook(){
 function chooseBook(){
     "use strict";
     var bookName = $("#booklist>option:selected").html();
-    window.open("index.html?bookName=" + bookName);
+    window.open("book.html?bookName=" + bookName);
 }
