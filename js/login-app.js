@@ -83,6 +83,7 @@ function addBook(){
                     if(json.success){
                         window.alert("Addbook successfully added");
                         listBooks();
+                        $("input[name=addbook]").val("");
                     } else {
                         window.alert("Addbook not added");
                         window.alert(json.debug);
@@ -94,6 +95,34 @@ function addBook(){
             console.log("Details: " + desc + "\nError: " + err);
         }
     });   
+}
+
+function deleteBook(){
+    if($('#booklist')[0].selectedIndex == -1){
+        window.alert("Please select an address book that you would like to delete");
+    } else {
+        $.ajax({
+        url: 'php/deletebook.php',
+        type: 'post',
+        dataType: 'json',
+        data: {
+            'bookName' : $("#booklist>option:selected").html(),
+        },
+        success: function(json) {
+            if(!json.boolean){
+                window.alert("Entry was not deleted, an error occured");
+            } else {
+                window.alert("You have successfully deleted this entry");
+                listEntries("name");
+            };
+        },
+        error: function(xhr, desc, err) {
+            console.log(xhr);
+            console.log("Details: " + desc + "\nError: " + err);
+        }
+    });
+    clearTextBoxes();
+    }
 }
 
 function chooseBook(){
