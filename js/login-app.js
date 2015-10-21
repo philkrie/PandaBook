@@ -121,7 +121,6 @@ function deleteBook(){
             console.log("Details: " + desc + "\nError: " + err);
         }
     });
-    clearTextBoxes();
     }
 }
 
