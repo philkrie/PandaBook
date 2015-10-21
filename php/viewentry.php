@@ -88,7 +88,7 @@ $row = $entryList[$id];
 // ============================================================================
 
 // Declare connector to naming scheme of database: keyMap[phpName] == mysqlName
-$keyMap = array('id'=>'person_ID', 'firstname'=>'first_name', 'lastname'=>'last_name', 'addr1'=>'addr1', 'addr2'=>'addr2', 'city'=>'city', 'state'=>'state', 'zip'=>'zip', 'phone'=>'phone', 'email'=>'email');
+$keyMap = array('id'=>'person_ID', 'firstname'=>'first_name', 'lastname'=>'last_name', 'addr1'=>'address_1', 'addr2'=>'address_2', 'city'=>'city', 'state'=>'state', 'zip'=>'zip', 'phone'=>'phone', 'email'=>'email');
 
 // Input: Row of db table.
 // Precondition: The input row has columns named like values of keyMap.

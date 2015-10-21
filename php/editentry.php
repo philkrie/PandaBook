@@ -179,8 +179,8 @@ function getIdOfExactMatch($fn, $ln, $city, $st, $zip, $ph, $email, $addr1, $add
 //         (No checking for duplicates in either case.)
 // ============================================================================
 
-if (array_key_exists('id', $_POST) and doesIdExist(intval($_POST['id'])) )
-{
+//if (array_key_exists('id', $_POST) and doesIdExist(intval($_POST['id'])) )
+//{
     // In this case, update an existing entry.
 
     $id = intval($_POST['id']);
@@ -201,19 +201,19 @@ if (array_key_exists('id', $_POST) and doesIdExist(intval($_POST['id'])) )
     mysql_query($sql);
 
     $idOut = $id;
-}
-else
-{
+//}
+//else
+//{
     // In this case, insert a new entry.
 
     // Construct & execute MySQL query to add row to the database. (Note: order matters here!)
-    $sql = "INSERT INTO $tableName (first_name, last_name, city, state, zip, phone, email, address_1, address_2, address_book_ID)
-            VALUES ('$fn', '$ln', '$city', '$st', '$zip', '$ph', '$email', '$addr1', '$addr2', '$bookName')";
-    mysql_query($sql);
+//    $sql = "INSERT INTO $tableName (first_name, last_name, city, state, zip, phone, email, address_1, address_2, address_book_ID)
+//            VALUES ('$fn', '$ln', '$city', '$st', '$zip', '$ph', '$email', '$addr1', '$addr2', '$bookName')";
+//    mysql_query($sql);
 
     // Get ID of newly created entry.
-    $idOut = getIdOfExactMatch($fn, $ln, $city, $st, $zip, $ph, $email, $addr1, $addr2, $bookName);
-}
+//    $idOut = getIdOfExactMatch($fn, $ln, $city, $st, $zip, $ph, $email, $addr1, $addr2, $bookName);
+//}
 
 
 // Put $idOut inside the overall return object and return JSON encoding of it.
