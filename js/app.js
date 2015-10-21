@@ -59,60 +59,37 @@ function addEntry(){
 
 //Function allows one to press submit and push information to the server.
 function submitEntry(){
-    
     //TODO: NEEDS INPUT VALIDATION AND VIEW
-    var phoneRegex = /^(\d{7}|\d{10})$/;
-    var stateRegex = /\b([A-Z]{2})\b/;
-    var zipRegex = /^\d{5}(?:[-\s]\d{4})?$/;
-    var emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
-
     //Input validation
-    if(($("input[name=firstname]").val() == "" && $("input[name=lastname]").val() == "") ||
-       ($("input[name=addr1]").val() == "" &&
-        $("input[name=addr2]").val() == "" &&
-        $("input[name=city]").val() == ""  &&
-        $("input[name=state]").val() == "" &&
-        $("input[name=zip]").val() == ""   &&
-        $("input[name=phone]").val() == "" &&
-        $("input[name=email]").val() == "")) {
-        window.alert("To submit an entry, please enter at least either a first name or a last name and one other piece of information")
-    } else if ($("input[name=phone]").val() != "" && (!phoneRegex.test($("input[name=phone]").val()))) {
-        window.alert("Invalid phone number, please correct. Needs 7 or 10 digits");
-    } else if ($("input[name=state]").val() != "" && (!stateRegex.test($("input[name=state]").val()))) {
-        window.alert("Invalid state code, please correct. Needs to be two uppercase letters");  
-    } else if ($("input[name=zip]").val() != "" && (!zipRegex.test($("input[name=zip]").val()))) {
-        window.alert("Invalid zip number, please correct. Needs 5 or 9 digits");  
-    } else if ($("input[name=email]").val() != "" && (!emailRegex.test($("input[name=email]").val()))) {
-        window.alert("Invalid email number, please correct. Needs an @ symbol and a .suffix (TLD)");  
-    } else {
-    $.ajax({
-        url: 'php/addentry.php',
-        type: 'post',
-        data: {
-            'bookName' : bookName,
-            'fn': $("input[name=firstname]").val(), 
-            'ln': $("input[name=lastname]").val(),
-            'addr1': $("input[name=addr1]").val(),
-            'addr2': $("input[name=addr2]").val(),
-            'city': $("input[name=city]").val(),  
-            'st': $("input[name=state]").val(), 
-            'zip': $("input[name=zip]").val(), 
-            'ph': $("input[name=phone]").val(), 
-            'email': $("input[name=email]").val(), 
-        },
-        success: function(data) {
-            if(data == -1){
-                window.alert("Entry was not added, an error occured");
-            } else {
-                window.alert("You have successfully added the entry ");
-                listEntries("name");
-            };
-        },
-        error: function(xhr, desc, err) {
-            console.log(xhr);
-            console.log("Details: " + desc + "\nError: " + err);
-        }
-    });
+    if(validation()){
+        $.ajax({
+            url: 'php/addentry.php',
+            type: 'post',
+            data: {
+                'bookName' : bookName,
+                'fn': $("input[name=firstname]").val(), 
+                'ln': $("input[name=lastname]").val(),
+                'addr1': $("input[name=addr1]").val(),
+                'addr2': $("input[name=addr2]").val(),
+                'city': $("input[name=city]").val(),  
+                'st': $("input[name=state]").val(), 
+                'zip': $("input[name=zip]").val(), 
+                'ph': $("input[name=phone]").val(), 
+                'email': $("input[name=email]").val(), 
+            },
+            success: function(data) {
+                if(data == -1){
+                    window.alert("Entry was not added, an error occured");
+                } else {
+                    window.alert("You have successfully added the entry ");
+                    listEntries("name");
+                };
+            },
+            error: function(xhr, desc, err) {
+                console.log(xhr);
+                console.log("Details: " + desc + "\nError: " + err);
+            }
+        });
     
     $("#entries").animate({ opacity: 100 });
     $("#edit-btn").fadeIn(300);
@@ -224,45 +201,49 @@ function editEntry(){
 function changeEntry(){
     //TODO: NEEDS INPUT VALIDATION AND VIEW
     $value = $('#entrylist option:selected').val();
-    $.ajax({
-        url: 'php/editentry.php',
-        type: 'post',
-        data: {
-            'bookName' : bookName,
-            'id': $value,
-            'fn': $("input[name=firstname]").val(), 
-            'ln': $("input[name=lastname]").val(),
-            'addr1': $("input[name=addr1]").val(),
-            'addr2': $("input[name=addr2]").val(),
-            'city': $("input[name=city]").val(),  
-            'st': $("input[name=state]").val(), 
-            'zip': $("input[name=zip]").val(), 
-            'ph': $("input[name=phone]").val(), 
-            'email': $("input[name=email]").val(), 
-        },
-        success: function(data) {
-            if(data == -1){
-                window.alert("Entry was not edited, an error occured");
-            } else {
-                window.alert("You have successfully edited the entry ");
-                listEntries("name");
-            };
-        },
-        error: function(xhr, desc, err) {
-            console.log(xhr);
-            console.log("Details: " + desc + "\nError: " + err);
-        }
-    });
+    //Input validation
     
-    $("#entries").animate({ opacity: 100 });
-    $("#edit-btn").fadeIn(300);
-    $("#delete-btn").fadeIn(300);
-    $("#add-btn").fadeIn(300);
-    $("#submit-btn").hide();
-    $("#cancel-btn").hide();
-    $("#change-btn").hide();
-    toggleTextBoxes(true);
-    clearTextBoxes();
+    if(validation()){
+        $.ajax({
+            url: 'php/editentry.php',
+            type: 'post',
+            data: {
+                'bookName' : bookName,
+                'id': $value,
+                'fn': $("input[name=firstname]").val(), 
+                'ln': $("input[name=lastname]").val(),
+                'addr1': $("input[name=addr1]").val(),
+                'addr2': $("input[name=addr2]").val(),
+                'city': $("input[name=city]").val(),  
+                'st': $("input[name=state]").val(), 
+                'zip': $("input[name=zip]").val(), 
+                'ph': $("input[name=phone]").val(), 
+                'email': $("input[name=email]").val(), 
+            },
+            success: function(data) {
+                if(data == -1){
+                    window.alert("Entry was not edited, an error occured");
+                } else {
+                    window.alert("You have successfully edited the entry ");
+                    listEntries("name");
+                };
+            },
+            error: function(xhr, desc, err) {
+                console.log(xhr);
+                console.log("Details: " + desc + "\nError: " + err);
+            }
+        });
+    
+        $("#entries").animate({ opacity: 100 });
+        $("#edit-btn").fadeIn(300);
+        $("#delete-btn").fadeIn(300);
+        $("#add-btn").fadeIn(300);
+        $("#submit-btn").hide();
+        $("#cancel-btn").hide();
+        $("#change-btn").hide();
+        toggleTextBoxes(true);
+        clearTextBoxes();
+    }
 }
 
 
@@ -302,6 +283,38 @@ function clearTextBoxes(){
 	$("input[name=zip]").val("");
 	$("input[name=phone]").val("");
 	$("input[name=email]").val("");
+}
+
+function validation(){
+    var phoneRegex = /^(\d{7}|\d{10})$/;
+    var stateRegex = /\b([A-Z]{2})\b/;
+    var zipRegex = /^\d{5}(?:[-\s]\d{4})?$/;
+    var emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+    
+    if(($("input[name=firstname]").val() == "" && $("input[name=lastname]").val() == "") ||
+       ($("input[name=addr1]").val() == "" &&
+        $("input[name=addr2]").val() == "" &&
+        $("input[name=city]").val() == ""  &&
+        $("input[name=state]").val() == "" &&
+        $("input[name=zip]").val() == ""   &&
+        $("input[name=phone]").val() == "" &&
+        $("input[name=email]").val() == "")) {
+        window.alert("To submit an entry, please enter at least either a first name or a last name and one other piece of information");
+        return false;
+    } else if ($("input[name=phone]").val() != "" && (!phoneRegex.test($("input[name=phone]").val()))) {
+        window.alert("Invalid phone number, please correct. Needs 7 or 10 digits");
+        return false;
+    } else if ($("input[name=state]").val() != "" && (!stateRegex.test($("input[name=state]").val()))) {
+        window.alert("Invalid state code, please correct. Needs to be two uppercase letters");
+        return false;
+    } else if ($("input[name=zip]").val() != "" && (!zipRegex.test($("input[name=zip]").val()))) {
+        window.alert("Invalid zip number, please correct. Needs 5 or 9 digits");
+        return false;
+    } else if ($("input[name=email]").val() != "" && (!emailRegex.test($("input[name=email]").val()))) {
+        window.alert("Invalid email number, please correct. Needs an @ symbol and a .suffix (TLD)");
+        return false;
+    }
+    return true;
 }
 
 function test(){
