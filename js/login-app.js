@@ -113,7 +113,7 @@ function deleteBook(){
                 window.alert("Entry was not deleted, an error occured");
             } else {
                 window.alert("You have successfully deleted this entry");
-                listEntries("name");
+                listBooks();
             };
         },
         error: function(xhr, desc, err) {

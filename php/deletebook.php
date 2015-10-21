@@ -61,6 +61,8 @@ $sql = "DELETE FROM $tableName WHERE address_book_ID = '$bookName'";
 $querySuccess = mysql_query($sql);
 
 $sql = "DELETE FROM book_names WHERE book_name = '$bookName'";
+$querySuccess = mysql_query($sql);
+
 
 
 if($querySuccess){
