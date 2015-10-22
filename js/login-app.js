@@ -5,7 +5,6 @@ var lastOpen = null;
 
 $(document).ready(function () {
 	"use strict";
-    
     $("#address-books").hide();
     $("#failure").hide();
 
@@ -72,6 +71,7 @@ function credentials() {
                     $("#login").hide();
                     $("#failure").hide();
                     listBooks();
+                    openLast();
                 } else {
                     $("#failure").show();
                 }
@@ -145,4 +145,24 @@ function chooseBook() {
     "use strict";
     var bookName = $("#booklist>option:selected").html();
     window.open("book.html?bookName=" + bookName);
+}
+
+function exportBook() {
+    "use strict";
+    var bookName = $("#booklist>option:selected").html();
+    $.ajax({
+        url: 'php/exportbook.php',
+        type: 'get',
+        data: {
+            'bookName': bookName
+        },
+        dataType: 'json',
+        success: function (data) {
+            
+        },
+        error: function (xhr, desc, err) {
+            console.log(xhr);
+            console.log("Details: " + desc + "\nError: " + err);
+        }
+    });
 }

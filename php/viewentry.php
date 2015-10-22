@@ -42,7 +42,7 @@ $tableName = 'address_book';       // Supply in MySQL query.
 // ============================================================================
 $id = intval($_GET['id']);
 $bookName = $_GET['bookName'];
-touchBook($bookName)
+touchBook($bookName);
 
 
 // ============================================================================

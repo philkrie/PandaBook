@@ -124,7 +124,7 @@ function validation() {
 }
 
 //Once document is loaded, several startup actions
-$(docum"useent).ready(function () {
+$(document).ready(function () {
 	"use strict";
     
     bookName = decodeURI(parent.document.URL.substring(parent.document.URL.indexOf('=') + 1, parent.document.URL.length));
