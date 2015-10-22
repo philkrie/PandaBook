@@ -149,20 +149,5 @@ function chooseBook() {
 
 function exportBook() {
     "use strict";
-    var bookName = $("#booklist>option:selected").html();
-    $.ajax({
-        url: 'php/exportbook.php',
-        type: 'get',
-        data: {
-            'bookName': bookName
-        },
-        dataType: 'json',
-        success: function (data) {
-            
-        },
-        error: function (xhr, desc, err) {
-            console.log(xhr);
-            console.log("Details: " + desc + "\nError: " + err);
-        }
-    });
+    listBooks();
 }
