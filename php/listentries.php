@@ -1,4 +1,5 @@
 <?php
+include 'utils.php';
 
 // ==========================================================================
 // * getlist.php (stub)
@@ -42,6 +43,7 @@ mysql_select_db($dbName) or die("Could not find database: " . mysql_error() );
 
 $sort = $_GET['sort'];
 $bookName = $_GET['bookName'];
+touchBook($bookName);
 // Construct & execute MySQL query to select rows from the database.
 //TODO: Don't assume the field is named last_name, use constant/keyMap below.
 if($sort == "name"){

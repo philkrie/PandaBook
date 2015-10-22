@@ -1,8 +1,10 @@
 /*jslint browser: true, devel:true*/
 /*global $, jQuery, alert*/
 
+//Variable that tells DB which address book we are using
 var bookName = null;
 
+//Function that lists the entries in the DB sorted according to the user's liking
 function listEntries(value) {
     "use strict";
     $("#entrylist option").remove();
@@ -59,6 +61,7 @@ function listEntries(value) {
     });
 }
 
+//Utility function that toggles the input boxes
 function toggleTextBoxes(boolean) {
     "use strict";
     $("input[name=firstname]").prop('disabled', boolean);
@@ -72,6 +75,7 @@ function toggleTextBoxes(boolean) {
 	$("input[name=email]").prop('disabled', boolean);
 }
 
+//Utility function that clears all of the text boxes
 function clearTextBoxes() {
     "use strict";
     $("input[name=firstname]").val("");
@@ -85,6 +89,7 @@ function clearTextBoxes() {
 	$("input[name=email]").val("");
 }
 
+//Utility function that validates for valid input
 function validation() {
     "use strict";
     var phoneRegex = /^(\d{7}|\d{10})$/,
@@ -118,7 +123,8 @@ function validation() {
     return true;
 }
 
-$(document).ready(function () {
+//Once document is loaded, several startup actions
+$(docum"useent).ready(function () {
 	"use strict";
     
     bookName = decodeURI(parent.document.URL.substring(parent.document.URL.indexOf('=') + 1, parent.document.URL.length));
@@ -130,6 +136,7 @@ $(document).ready(function () {
 
 });
 
+//Allows you to cancel entering or editing an entry
 function cancelEntry() {
     "use strict";
     clearTextBoxes();
@@ -230,6 +237,7 @@ function submitEntry() {
     }
 }
 
+//Function that deletes the current entry
 function deleteEntry() {
     "use strict";
     if ($('#entrylist')[0].selectedIndex === -1) {
@@ -261,6 +269,7 @@ function deleteEntry() {
     }
 }
 
+//Function that sets up the page for editing an existing entry
 function editEntry() {
     "use strict";
     if ($('#entrylist')[0].selectedIndex === -1) {
@@ -274,6 +283,7 @@ function editEntry() {
     }
 }
 
+//Function that allows one to press change and push information to the server
 function changeEntry() {
     "use strict";
     var $value = $('#entrylist option:selected').val();

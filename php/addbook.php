@@ -1,4 +1,5 @@
 <?php
+include 'utils.php';
 
 // ==========================================================================
 // * addbook.php
@@ -49,6 +50,8 @@ if (!array_key_exists('bookName', $_POST))
 
 // Script GET/POST parameters.
 $bookName = $_POST['bookName'];
+touchBook($bookName);
+
 
 // Constants & static parameters.
 $dbName = 'panda_address_book';    // Supply to mysql_select_db().

@@ -1,4 +1,5 @@
 <?php
+include 'utils.php';
 $dbName = 'panda_address_book';    // Supply to mysql_select_db().
 $tableName = 'book_names';  
 

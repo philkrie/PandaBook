@@ -1,6 +1,7 @@
 
 
 <?php
+include 'utils.php';
 
 // ==========================================================================
 // * editentry.php
@@ -95,6 +96,7 @@ $email = lookupWithDefault('email', "");
 //TEST:
 //$bookName = $_GET['bookName'];
 $bookName = $_POST['bookName'];
+touchBook($bookName);
 
 
 // ============================================================================

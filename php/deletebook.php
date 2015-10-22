@@ -1,4 +1,5 @@
 <?php
+include 'utils.php';
 
 /*<!DOCTYPE html>
 
@@ -23,6 +24,7 @@
 
 // Grab URL parameter.
 $bookName = $_POST['bookName'];
+
 
 // Fabricated table data for stub debug.
 /*
