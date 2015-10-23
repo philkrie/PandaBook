@@ -42,7 +42,9 @@ if (isset($_POST['submit'])) {
     fclose($handle);
  
 
-    print "Import done";
+    echo '</br>Import complete </br>';
+
+    echo '</br><h2>Please close this tab to return to your books!<h2> </br>';
 
     //view upload form
 }

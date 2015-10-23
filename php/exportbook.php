@@ -33,7 +33,7 @@ while($row = mysql_fetch_array($results))
 }
 
 //download file
-@header('Content-Type: application/tsv; charset=utf-8');
+@header('Content-Type: text/csv; charset=utf-8');
 @header('Content-Disposition: attachment; filename="'.$bookName.'.tsv"');
 echo readfile($filename);
 

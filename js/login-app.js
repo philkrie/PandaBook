@@ -8,6 +8,32 @@ $(document).ready(function () {
     $("#address-books").hide();
     $("#failure").hide();
 
+    $("#import").submit(function (e) {
+    
+    var formObj = $(this);
+    var formURL = formObj.attr("action");
+    var formData = new FormData(this);
+    $.ajax({
+        url: formURL,
+        type: 'POST',
+        data:  formData,
+        mimeType: "multipart/form-data",
+        contentType: false,
+        cache: false,
+        processData: false,
+        success: function (data, textStatus, jqXHR) {
+            window.alert("The file was successfully imported!");
+            listBooks();
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            window.alert("The file was not imported!");
+        }
+    });
+    e.preventDefault(); //Prevent Default action. 
+    e.unbind();
+});
+$("#multiform").submit(); //Submit the form
+
 });
 
 //Open last opened book
@@ -89,13 +115,15 @@ function credentials() {
 
 function addBook() {
     "use strict";
+    if($("input[name=addbook]").val().replace(/^\s+|\s+$/g, "").length == 0){
+        window.alert("You must type in a name for the address book");
+    } else {
     $.ajax({
         url: 'php/addbook.php',
         type: 'post',
         data: {'bookName': $("input[name=addbook]").val()},
         dataType: 'json',
         success: function (json) {
-            window.alert("addbook activated");
             if (json.success) {
                 window.alert("Addbook successfully added");
                 listBooks();
@@ -111,6 +139,7 @@ function addBook() {
             console.log("Details: " + desc + "\nError: " + err);
         }
     });
+    }
 }
 
 function deleteBook() {
@@ -150,5 +179,24 @@ function chooseBook() {
 
 function exportBook() {
     "use strict";
-    listBooks();
+    if ($('#booklist')[0].selectedIndex === -1) {
+        window.alert("Please select an address book to export");
+    }else {
+    var bookName = $("#booklist>option:selected").html();
+    $.ajax({
+        url: 'php/exportbook.php',
+        type: 'get',
+        data: {
+            'bookName': bookName
+        },
+        dataType: 'html',
+        success: function (data) {
+            window.location.href = 'php/'+bookName+'.tsv';
+        },
+        error: function (xhr, desc, err) {
+            console.log(xhr);
+            console.log("Details: " + desc + "\nError: " + err);
+        }
+    });
+    }
 }

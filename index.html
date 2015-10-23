@@ -33,9 +33,9 @@
                                 <button id="add-book-btn" type="button" class="btn btn-default" onclick="addBook()">Create New Address Book</button>
                                 <button id="delete-book-btn" type="button" class="btn btn-default" onclick="deleteBook()">Delete Address Book</button>
                                 <button id="export-book-btn" type="button" class="btn btn-default" onclick="exportBook()">Export Address Book</button>
-                                <form id="import" action="php/importbook.php" method="post" enctype="multipart/form-data" target="_blank">
+                                <form id="import" name="import" action="php/importbook.php" method="post" enctype="multipart/form-data" target="_blank">
                                     <input type="file" name="tsv" value="" />
-                                    <input class="btn btn-default" type="submit" name="submit" onclick="importBook()" value="Import Address Book" />
+                                    <input class="btn btn-default" type="submit" name="submit" value="Import Address Book" />
                                 </form>
                             </div>
 						</div>

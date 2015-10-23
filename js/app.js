@@ -131,7 +131,9 @@ $(document).ready(function () {
     $("#submit-btn").hide();
     $("#cancel-btn").hide();
     $("#change-btn").hide();
+    $("#bookTitle").html(bookName);
     listEntries("name");
+    document.title = bookName;
     
 });
 
