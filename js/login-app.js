@@ -22,8 +22,13 @@ $(document).ready(function () {
         cache: false,
         processData: false,
         success: function (data, textStatus, jqXHR) {
-            window.alert("The file was successfully imported!");
-            listBooks();
+            if(data === 'FAILURE'){
+                window.alert("The file was not imported!");
+            } else {
+              window.alert("The file was successfully imported!");
+                listBooks();  
+            }
+            
         },
         error: function (jqXHR, textStatus, errorThrown) {
             window.alert("The file was not imported!");
@@ -177,7 +182,7 @@ function chooseBook() {
     "use strict";
     var bookName = $("#booklist>option:selected").html();
     window.open("book.html?bookName=" + bookName);
-    window.alert("Opened address book:" + bookName);
+    window.alert("Opened address book: " + bookName);
 }
 
 function exportBook() {

@@ -6,6 +6,11 @@ $tableName = 'address_book';
 mysql_connect('ix-trusty:3022','xunl','tbc123bl') or die("Could not connect: " . mysql_error() );
 mysql_select_db($dbName) or die("Could not find database: " . mysql_error() );
 
+$mimes = array('application/vnd.ms-excel','text/plain','text/csv','text/tsv', 'text/tab-separated-values');
+if(in_array($_FILES['tsv']['type'],$mimes)){
+  // do something
+
+
 
 
 if (isset($_POST['submit'])) {
@@ -17,7 +22,6 @@ if (isset($_POST['submit'])) {
    }
 
  
-
     //Import uploaded file to Database
     $filename = pathinfo($_FILES['tsv']['name'], PATHINFO_FILENAME);
     $handle = fopen($_FILES['tsv']['tmp_name'], "r");
@@ -47,5 +51,11 @@ if (isset($_POST['submit'])) {
     echo '</br><h2>Please close this tab to return to your books!<h2> </br>';
 
     //view upload form
+}
+    
+} else {
+    echo "FAILURE";
+    header("HTTP/1.1 404 Not Found");
+  die("Sorry, mime type not allowed");
 }
 ?>
