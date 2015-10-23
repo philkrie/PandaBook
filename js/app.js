@@ -132,8 +132,7 @@ $(document).ready(function () {
     $("#cancel-btn").hide();
     $("#change-btn").hide();
     listEntries("name");
-    window.alert("WE RECIEVED " + bookName);
-
+    
 });
 
 //Allows you to cancel entering or editing an entry
@@ -242,7 +241,7 @@ function deleteEntry() {
     "use strict";
     if ($('#entrylist')[0].selectedIndex === -1) {
         window.alert("Please select an entry that you would like to delete");
-    } else {
+    } else if (confirm("Are you sure you want to delete this?")) {
         var $value = $('#entrylist option:selected').val();
         $.ajax({
             url: 'php/deleteentry.php',

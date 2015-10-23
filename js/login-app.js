@@ -117,7 +117,7 @@ function deleteBook() {
     "use strict";
     if ($('#booklist')[0].selectedIndex === -1) {
         window.alert("Please select an address book that you would like to delete");
-    } else {
+    } else if (confirm("Are you sure you want to delete this book?")) {
         $.ajax({
             url: 'php/deletebook.php',
             type: 'post',
@@ -145,6 +145,7 @@ function chooseBook() {
     "use strict";
     var bookName = $("#booklist>option:selected").html();
     window.open("book.html?bookName=" + bookName);
+    window.alert("Opened address book:" + bookName);
 }
 
 function exportBook() {
