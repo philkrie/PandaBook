@@ -144,7 +144,10 @@ function addBook() {
 
 function deleteBook() {
     "use strict";
-    if ($('#booklist')[0].selectedIndex === -1) {
+    if($('#booklist option').length <= 1){
+        window.alert("You cannot delete your last book!");
+    }
+    else if ($('#booklist')[0].selectedIndex === -1) {
         window.alert("Please select an address book that you would like to delete");
     } else if (confirm("Are you sure you want to delete this book?")) {
         $.ajax({
